@@ -113,9 +113,9 @@ contract SpaceBase is SpaceAccessControl {
     ///  method doesn't do any checking and should only be called when the
     ///  input data is known to be valid. Will generate both a Birth event
     ///  and a Transfer event.
-    /// @param _generation The generation number of this cat, must be computed by caller.
+    /// @param _generation The generation number of this planet, must be computed by caller.
     /// @param _genes The Planet's genetic code.
-    /// @param _owner The inital owner of this cat, must be non-zero (except for the unPlanet, ID 0)
+    /// @param _owner The inital owner of this planet, must be non-zero (except for the unPlanet, ID 0)
     function _createPlanet(
         uint256 _generation,
         uint256 _genes,
@@ -145,7 +145,7 @@ contract SpaceBase is SpaceAccessControl {
         });
         uint256 newplanetId = planets.push(_Planet) - 1;
 
-        // It's probably never going to happen, 4 billion cats is A LOT, but
+        // It's probably never going to happen, 4 billion planets is A LOT, but
         // let's just be 100% sure we never let this happen.
         require(newplanetId == uint256(uint32(newplanetId)));
 
