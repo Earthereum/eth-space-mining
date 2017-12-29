@@ -31,8 +31,8 @@ contract ERC721 {
 contract SpaceOwnership is SpaceBase, ERC721 {
 
 	/// @notice Name and symbol of the non fungible token, as defined in ERC721.
-    string public name = "CryptoPlanets";
-    string public symbol = "CP";
+    string public name = "Earthereum";
+    string public symbol = "ERTH";
 
     // bool public implementsERC721 = true;
     //
