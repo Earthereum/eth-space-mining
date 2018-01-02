@@ -1,6 +1,7 @@
 pragma solidity ^0.4.18;
 
 import "./SpaceAccessControl.sol";
+import "./SpaceAuction.sol";
 
 contract SpaceBase is SpaceAccessControl {
 	 /*** EVENTS ***/
@@ -91,7 +92,7 @@ contract SpaceBase is SpaceAccessControl {
     /// @dev The address of the ClockAuction contract that handles sales of Planets. This
     ///  same contract handles both peer-to-peer sales as well as the gen0 sales which are
     ///  initiated every 15 minutes.
-    // SaleClockAuction public saleAuction;
+    SaleClockAuction public saleAuction;
 
     /// @dev Assigns ownership of a specific Planet to an address.
     function _transfer(address _from, address _to, uint256 _tokenId) internal {
