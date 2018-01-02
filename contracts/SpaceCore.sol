@@ -136,7 +136,7 @@ contract SpaceCore is SpaceCreation {
         // and how to have an accurate subtractFee.
         uint256 subtractFees = 1;
         if (balance > subtractFees) {
-            cfoAddress.send(balance - subtractFees);
+            cfoAddress.transfer(balance - subtractFees);
         }
     }
 }
