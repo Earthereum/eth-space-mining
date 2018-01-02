@@ -4,6 +4,7 @@ var SpaceAccessControl = artifacts.require("./SpaceAccessControl.sol");
 var SpaceOwnership = artifacts.require("./SpaceOwnership.sol");
 var SpaceCreation = artifacts.require("./SpaceCreation.sol");
 var SpaceAuction = artifacts.require("./SpaceAuction.sol");
+var SpaceCore = artifacts.require("./SpaceCore.sol");
 
 module.exports = function(deployer) {
   deployer.deploy(Users);
@@ -12,5 +13,6 @@ module.exports = function(deployer) {
   deployer.deploy(SpaceOwnership);
   deployer.deploy(SpaceCreation);
   deployer.deploy(SpaceAuction);
+  deployer.deploy(SpaceCore);
 };
 
