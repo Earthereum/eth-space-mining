@@ -4,7 +4,6 @@
     <div v-if="userExists">
       Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
     </div>
-    <div v-else>Sign up <router-link to="/signup">here</router-link>.</div>
     <div id="sign-in-button">
       <button v-on:click="ethSignIn">Sign In with Ethereum</button>
     </div>
@@ -60,7 +59,7 @@ export default {
 
       console.log('CLICKED, SENDING PERSONAL SIGN REQ');
 
-      // Now with Eth.js
+      // Use Eth.js
       var eth = new Eth(window.web3.currentProvider);
 
       eth.personal_sign(msg, from)
@@ -73,6 +72,7 @@ export default {
       .then((recovered) => {
         if (recovered === from) {
           console.log('Ethjs recovered the message signer!');
+          this.$router.push({path: 'signup'});
         } else {
           console.log('Ethjs failed to recover the message signer!');
           console.dir({ recovered });
