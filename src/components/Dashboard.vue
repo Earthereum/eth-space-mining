@@ -2,17 +2,11 @@
   <v-layout row wrap>
     <v-flex xs12>
       <h1>{{ msg }}</h1>
-      
       <div v-if="userExists">
         Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
       </div>
-      
-      <div v-else>
-        Sign up <router-link to="/signup">here</router-link>.
-      </div>
-      
       <div id="sign-in-button">
-        <v-btn color="primary" raised v-on:click="ethSignIn">Sign In with Ethereum</v-btn>
+        <v-btn color="primary" v-on:click="ethSignIn">Sign In with Ethereum</v-btn>
       </div>
     </v-flex>
   </v-layout>
@@ -67,7 +61,7 @@ export default {
 
       console.log('CLICKED, SENDING PERSONAL SIGN REQ');
 
-      // Now with Eth.js
+      // Use Eth.js
       var eth = new Eth(window.web3.currentProvider);
 
       eth.personal_sign(msg, from)
@@ -80,6 +74,7 @@ export default {
       .then((recovered) => {
         if (recovered === from) {
           console.log('Ethjs recovered the message signer!');
+          this.$router.push({path: 'signup'});
         } else {
           console.log('Ethjs failed to recover the message signer!');
           console.dir({ recovered });
