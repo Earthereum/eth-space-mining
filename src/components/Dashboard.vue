@@ -5,11 +5,16 @@
       Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
     </div>
     <div v-else>Sign up <router-link to="/signup">here</router-link>.</div>
+    <div id="sign-in-button">
+      <button v-on:click="ethSignIn">Sign In with Ethereum</button>
+    </div>
   </div>
 </template>
 
 <script>
 import Users from '@/js/users'
+var Eth = require('ethjs')
+window.Eth = Eth
 
 export default {
   name: 'dashboard',
@@ -45,6 +50,9 @@ export default {
       }).catch(err => {
         console.log(err)
       })
+    },
+    ethSignIn: function (e) {
+      console.log('eth sign in!')
     }
   }
 }
