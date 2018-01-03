@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import Users from '@/js/users'
-var Eth = require('ethjs')
-window.Eth = Eth
+import Users from '@/js/users';
+var Eth = require('ethjs');
+window.Eth = Eth;
 
 export default {
   name: 'dashboard',
@@ -22,7 +22,7 @@ export default {
     return {
       msg: 'Welcome to your truffle-vue dApp',
       pseudo: undefined
-    }
+    };
   },
   computed: {
     userExists: function () {
@@ -34,25 +34,25 @@ export default {
       Users.exists(window.web3.eth.accounts[0]).then((exists) => {
         if (exists) {
           Users.authenticate().then(pseudo => {
-            this.pseudo = pseudo
-          })
+            this.pseudo = pseudo;
+          });
         }
       })
     }).catch(err => {
-      console.log(err)
+      console.log(err);
     })
   },
   methods: {
     destroyAccount: function (e) {
-      e.preventDefault()
+      e.preventDefault();
       Users.destroy().then(() => {
-        this.pseudo = undefined
+        this.pseudo = undefined;
       }).catch(err => {
-        console.log(err)
-      })
+        console.log(err);
+      });
     },
     ethSignIn: function (e) {
-      console.log('eth sign in!')
+      console.log('eth sign in!');
     }
   }
 }
