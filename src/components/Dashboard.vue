@@ -1,12 +1,15 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
-      <h1>{{ msg }}</h1>
-      <div v-if="userExists">
-        Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
-      </div>
-      <div id="sign-in-button">
-        <v-btn color="primary" v-on:click="ethSignIn">Sign In with Ethereum</v-btn>
+      <div class="text-xs-center">
+        <img src="../assets/logo.png">
+        <h1>{{ msg }}</h1>
+        <div v-if="userExists">
+          Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
+        </div>
+        <div id="sign-in-button">
+          <v-btn color="primary" v-on:click="ethSignIn">Sign In</v-btn>
+        </div>
       </div>
     </v-flex>
   </v-layout>
@@ -22,7 +25,7 @@ export default {
   name: 'dashboard',
   data () {
     return {
-      msg: 'Welcome to your truffle-vue dApp',
+      msg: 'Welcome to Earthereum',
       pseudo: undefined
     };
   },
