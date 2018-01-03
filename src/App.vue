@@ -1,23 +1,43 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <v-app>
+      <v-navigation-drawer
+        clipped
+        fixed
+        v-model="drawer"
+        app>
+      </v-navigation-drawer>
+      
+      <v-toolbar app fixed clipped-left>
+        <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+        <v-toolbar-title>{{name}}</v-toolbar-title>
+      </v-toolbar>
+
+      <v-content>
+        <v-container fluid fill-height>
+            <router-view></router-view>
+        </v-container>
+      </v-content>
+      
+      <v-footer app fixed>
+        <span>&copy; {{new Date().getFullYear()}} Earthereum</span>
+      </v-footer>
+    </v-app>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'app'
+  name: 'Earthereum',
+  data: () => ({
+    drawer: false
+  }),
+  props: {
+    source: String
+  }
 }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+
 </style>

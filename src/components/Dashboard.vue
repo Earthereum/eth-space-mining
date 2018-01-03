@@ -1,14 +1,21 @@
 <template>
-  <div class="dashboard">
-    <h1>{{ msg }}</h1>
-    <div v-if="userExists">
-      Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
-    </div>
-    <div v-else>Sign up <router-link to="/signup">here</router-link>.</div>
-    <div id="sign-in-button">
-      <button v-on:click="ethSignIn">Sign In with Ethereum</button>
-    </div>
-  </div>
+  <v-layout row wrap>
+    <v-flex xs12>
+      <h1>{{ msg }}</h1>
+      
+      <div v-if="userExists">
+        Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
+      </div>
+      
+      <div v-else>
+        Sign up <router-link to="/signup">here</router-link>.
+      </div>
+      
+      <div id="sign-in-button">
+        <v-btn color="primary" raised v-on:click="ethSignIn">Sign In with Ethereum</v-btn>
+      </div>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>

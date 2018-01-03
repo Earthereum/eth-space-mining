@@ -5,8 +5,9 @@ import App from './App'
 import Web3 from 'web3'
 import router from './router'
 
-import Vuetify from 'vuetify'
-Vue.use(Vuetify)
+import Vuetify from 'vuetify';
+Vue.use(Vuetify);
+import('../node_modules/vuetify/dist/vuetify.min.css');
 
 Vue.config.productionTip = false
 
