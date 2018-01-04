@@ -1,10 +1,10 @@
 <template>
     <v-layout column>
-        <v-flex xs12 sm6 offset-sm3>
+        <v-flex>
             <v-container fluid grid-list-md class="grey lighten-4">
                 <v-layout row wrap>
                     <v-flex
-                            v-bind="{ [`xs6`]: true }"
+                            v-bind="{ [`xs3`]: true }"
                             v-for="card in cards"
                             :key="card.title"
                     >
@@ -50,6 +50,17 @@
       cards: [
         { title: 'Purple Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VE9NJ/atmotest_1.png', flex: 6 },
         { title: 'Brown Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VER9C/atmotest_5.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
         { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 }
       ]
     })
