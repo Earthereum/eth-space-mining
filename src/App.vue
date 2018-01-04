@@ -1,29 +1,34 @@
 <template>
     <div id="app">
         <v-app>
-            <v-navigation-drawer
-                    clipped
-                    fixed
-                    v-model="drawer"
-                    app>
-            </v-navigation-drawer>
-
+            <!--<v-navigation-drawer v-model="drawer">-->
+                <!--<v-list>-->
+                    <!--<v-list-tile v-for="item in menuItems" :key="item.title">-->
+                        <!--<v-list-tile-action>-->
+                            <!--<v-icon>search</v-icon>-->
+                        <!--</v-list-tile-action>-->
+                        <!--<v-list-tile-content>{{ item.title }}</v-list-tile-content>-->
+                    <!--</v-list-tile>-->
+                <!--</v-list>-->
+            <!--</v-navigation-drawer>-->
             <v-toolbar dark color="primary" app fixed clipped-left>
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-                <v-toolbar-title class="white--text">Title</v-toolbar-title>
+                <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
+                <v-toolbar-title class="white--text">Earthereum</v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn icon>
-                    <v-icon>search</v-icon>
+                <v-btn v-for="item in menuItems" :key="item.title">
+                    <!--<v-icon>search</v-icon>-->
+                    {{ item.title }}
                 </v-btn>
-                <v-btn icon>
-                    <v-icon>apps</v-icon>
-                </v-btn>
-                <v-btn icon>
-                    <v-icon>refresh</v-icon>
-                </v-btn>
-                <v-btn icon>
-                    <v-icon>more_vert</v-icon>
-                </v-btn>
+                <!--<v-btn icon>-->
+                    <!--<v-icon>apps</v-icon>-->
+                    <!--{{ item.title }}-->
+                <!--</v-btn>-->
+                <!--<v-btn icon>-->
+                    <!--<v-icon>refresh</v-icon>-->
+                <!--</v-btn>-->
+                <!--<v-btn icon>-->
+                    <!--<v-icon>more_vert</v-icon>-->
+                <!--</v-btn>-->
             </v-toolbar>
 
             <!--<v-navigation-drawer-->
@@ -55,7 +60,16 @@
   export default {
     name: 'Earthereum',
     data: () => ({
-      drawer: false
+      drawer: false,
+      menuItems: [
+        {title: 'Home'},
+        {title: 'Market'},
+        {title: 'Planet'},
+        {title: 'About'},
+        {title: 'zartman.xyz DIRECT LINK'}
+
+      ]
+
     }),
     props: {
       source: String
