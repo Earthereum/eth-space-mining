@@ -13,9 +13,13 @@
             <!--</v-navigation-drawer>-->
             <v-toolbar dark color="primary" app fixed clipped-left>
                 <v-toolbar-side-icon @click.stop="drawer = !drawer" class="hidden-sm-and-up"></v-toolbar-side-icon>
-                <v-toolbar-title class="white--text">Earthereum</v-toolbar-title>
+                <v-toolbar-title class="white--text">
+                    <router-link to="/" tag="span" style="cursor: pointer">Earthereum</router-link>
+                </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn v-for="item in menuItems" :key="item.title">
+                <v-btn v-for="item in menuItems" :key="item.title"
+                router
+                :to="item.link">
                     <!--<v-icon>search</v-icon>-->
                     {{ item.title }}
                 </v-btn>
@@ -42,13 +46,14 @@
             <!--<v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>-->
             <!--<v-toolbar-title>{{name}}</v-toolbar-title>-->
             <!--</v-toolbar>-->
-
+    <main>
             <v-content>
             <v-container fluid fill-height>
             <router-view></router-view>
             </v-container>
             </v-content>
 
+    </main>
             <v-footer app fixed>
                 <span>&copy; {{new Date().getFullYear()}} Earthereum</span>
             </v-footer>
@@ -62,11 +67,11 @@
     data: () => ({
       drawer: false,
       menuItems: [
-        {title: 'Home'},
-        {title: 'Market'},
-        {title: 'Planet'},
-        {title: 'About'},
-        {title: 'zartman.xyz DIRECT LINK'}
+        {title: 'Home', link: '/'},
+        {title: 'Market', link: '/market'},
+        {title: 'Planet', link: '/'},
+        {title: 'About', link: '/'},
+        {title: 'zartman.xyz DIRECT LINK', link: '/logan'}
 
       ]
 

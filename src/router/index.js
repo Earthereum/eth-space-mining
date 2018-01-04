@@ -2,6 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import Signup from '@/components/Signup'
+import Market from '@/components/Market/Market'
+import DirectLink from '@/components/DirectLink'
 
 Vue.use(Router);
 
@@ -16,6 +18,17 @@ export default new Router({
       path: '/signup',
       name: 'signup',
       component: Signup
+    },
+    {
+      path: '/market',
+      name: 'Market',
+      component: Market
+    },
+    {
+      path: '/logan',
+      name: 'Logan',
+      component: DirectLink
     }
-  ]
+  ],
+  mode: 'history'
 })
