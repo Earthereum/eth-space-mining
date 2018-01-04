@@ -9,14 +9,14 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 import('../node_modules/vuetify/dist/vuetify.min.css');
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 window.addEventListener('load', function () {
   if (typeof web3 !== 'undefined') {
-    console.log('Web3 injected browser: OK.')
+    console.log('Web3 injected browser: OK.');
     window.web3 = new Web3(window.web3.currentProvider)
   } else {
-    console.log('Web3 injected browser: Fail. You should consider trying MetaMask.')
+    console.log('Web3 injected browser: Fail. You should consider trying MetaMask.');
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
@@ -28,5 +28,5 @@ window.addEventListener('load', function () {
     template: '<App/>',
     components: { App }
   })
-})
+});
 

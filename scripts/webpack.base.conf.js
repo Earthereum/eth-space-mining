@@ -1,7 +1,7 @@
-var path = require('path')
-var utils = require('./utils')
-var config = require('../config/webpack')
-var vueLoaderConfig = require('../config/vue-loader/vue-loader.conf')
+var path = require('path');
+var utils = require('./utils');
+var config = require('../config/webpack');
+var vueLoaderConfig = require('../config/vue-loader/vue-loader.conf');
 
 function resolve (dir) {
   return path.join(__dirname, '..', dir)
@@ -76,4 +76,4 @@ module.exports = {
       }
     ]
   }
-}
+};

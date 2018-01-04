@@ -28,10 +28,10 @@
     },
     methods: {
       signup: function () {
-        let self = this
+        let self = this;
         if (typeof this.form.pseudo !== 'undefined' && this.form.pseudo !== '') {
           Users.create(this.form.pseudo).then(tx => {
-            console.log(tx)
+            console.log(tx);
             self.$router.push('/')
           }).catch(err => {
             console.log(err)
