@@ -71,7 +71,7 @@
         {title: 'Market', link: '/market'},
         {title: 'Planet', link: '/'},
         {title: 'About', link: '/'},
-        {title: 'zartman.xyz DIRECT LINK', link: '/logan'}
+        {title: 'GitHub', link: '/github'}
 
       ]
 

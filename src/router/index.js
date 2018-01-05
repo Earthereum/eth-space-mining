@@ -25,9 +25,10 @@ export default new Router({
       component: Market
     },
     {
-      path: '/logan',
-      name: 'Logan',
-      component: DirectLink
+      path: '/github',
+      name: 'GitHub',
+      component: DirectLink,
+      props: {url: 'https://github.com/earthereum'}
     }
   ],
   mode: 'history'
