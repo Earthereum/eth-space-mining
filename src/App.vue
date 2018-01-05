@@ -17,10 +17,9 @@
                     <router-link to="/" tag="span" style="cursor: pointer">Earthereum</router-link>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
-                <v-btn v-for="item in menuItems" :key="item.title"
-                router
-                :to="item.link">
-                    <!--<v-icon>search</v-icon>-->
+                <v-btn flat dark v-for="item in menuItems" :key="item.title"
+                 router :to="item.link">
+                    <!-- <v-icon>search</v-icon> -->
                     {{ item.title }}
                 </v-btn>
                 <!--<v-btn icon>-->
@@ -69,8 +68,8 @@
       menuItems: [
         {title: 'Home', link: '/'},
         {title: 'Market', link: '/market'},
-        {title: 'Planet', link: '/'},
-        {title: 'About', link: '/'},
+        {title: 'Planet', link: '/planet/1'},
+        {title: 'About', link: '/about'},
         {title: 'GitHub', link: '/github'}
 
       ]
