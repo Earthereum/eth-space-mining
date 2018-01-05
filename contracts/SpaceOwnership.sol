@@ -34,7 +34,7 @@ contract SpaceOwnership is SpaceBase, ERC721 {
     string public name = "Earthereum";
     string public symbol = "ERTH";
 
-    // bool public implementsERC721 = true;
+    bool public implementsERC721 = true;
     //
     function supportsInterface(bytes4 _interfaceID) external view returns (bool)
     {
