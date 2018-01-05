@@ -8,7 +8,7 @@
                             v-for="card in cards"
                             :key="card.title"
                     >
-                        <v-card>
+                        <v-card tile="true" ripple="true" raised="true" :to="card.link">
                             <v-card-media
                                     :src="card.src"
                                     height="300px"
@@ -48,20 +48,9 @@
   export default {
     data: () => ({
       cards: [
-        { title: 'Purple Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VE9NJ/atmotest_1.png', flex: 6 },
-        { title: 'Brown Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VER9C/atmotest_5.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 },
-        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6 }
+        { title: 'Purple Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VE9NJ/atmotest_1.png', flex: 6, link: '/market/1', id: 1 },
+        { title: 'Brown Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VER9C/atmotest_5.png', flex: 6, link: '/market/2', id: 2 },
+        { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6, link: '/market/3', id: 3 }
       ]
     })
   }
