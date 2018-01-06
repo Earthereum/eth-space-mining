@@ -8,7 +8,6 @@
                                 color="primary"
                                 dark
                                 class="white--text"
-                                ripple="false"
                         >
                             <v-icon left dark>account_balance</v-icon>
                             For Sale Ξ {{ planet.price }}
