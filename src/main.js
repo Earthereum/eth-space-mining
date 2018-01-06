@@ -10,6 +10,9 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 import('../node_modules/vuetify/dist/vuetify.min.css');
 
+import PlanetDisplay from 'earthereum-renderer';
+Vue.component('planet-display', PlanetDisplay);
+
 import contract from 'truffle-contract'
 
 import CreationContract from '../build/contracts/SpaceCreation.json'

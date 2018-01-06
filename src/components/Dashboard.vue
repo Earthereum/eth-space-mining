@@ -2,7 +2,7 @@
   <v-layout row wrap>
     <v-flex xs12>
       <div class="text-xs-center">
-        <img src="../assets/logo.png">
+        <planet-display :planet="demoPlanet"></planet-display>
         <h1>{{ msg }}</h1>
         <div id="sign-in-button">
           <v-btn color="primary" v-on:click="ethSignIn">Sign In</v-btn>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import {Planet} from 'earthereum-renderer';
 var ethUtil = require('ethereumjs-util');
 var Eth = require('ethjs');
 window.Eth = Eth;
@@ -22,7 +23,17 @@ export default {
   data () {
     return {
       msg: 'Welcome to Earthereum',
-      pseudo: undefined
+      pseudo: undefined,
+      demoPlanet: new Planet({
+        'seed': 0x42069,
+        'size': 0.7,
+        'water': 0.5,
+        'atmoDensity': 0.5,
+        'cloudDensity': 0.5,
+        'baseColor': 0xa4be92,
+        'accColor': 0xf5dac3,
+        'numTerrains': 4
+      })
     };
   },
   computed: {
