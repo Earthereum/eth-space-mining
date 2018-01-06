@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import Signup from '@/components/Signup'
 import Market from '@/components/Market/Market'
 import DirectLink from '@/components/DirectLink'
 import Planet from '@/components/Market/Planet'
@@ -14,11 +13,6 @@ export default new Router({
       path: '/',
       name: 'dashboard',
       component: Dashboard
-    },
-    {
-      path: '/signup',
-      name: 'signup',
-      component: Signup
     },
     {
       path: '/market',

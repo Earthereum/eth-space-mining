@@ -4,9 +4,6 @@
       <div class="text-xs-center">
         <img src="../assets/logo.png">
         <h1>{{ msg }}</h1>
-        <div v-if="userExists">
-          Welcome {{ pseudo }}. Destroy your account by clicking <a href="#" @click="destroyAccount">here</a>.
-        </div>
         <div id="sign-in-button">
           <v-btn color="primary" v-on:click="ethSignIn">Sign In</v-btn>
         </div>
@@ -16,7 +13,6 @@
 </template>
 
 <script>
-import Users from '@/js/users';
 var ethUtil = require('ethereumjs-util');
 var Eth = require('ethjs');
 window.Eth = Eth;
@@ -34,28 +30,7 @@ export default {
       return (typeof this.pseudo !== 'undefined')
     }
   },
-  beforeCreate: function () {
-    Users.init().then(() => {
-      Users.exists(window.web3.eth.accounts[0]).then((exists) => {
-        if (exists) {
-          Users.authenticate().then(pseudo => {
-            this.pseudo = pseudo;
-          });
-        }
-      })
-    }).catch(err => {
-      console.log(err);
-    })
-  },
   methods: {
-    destroyAccount: function (e) {
-      e.preventDefault();
-      Users.destroy().then(() => {
-        this.pseudo = undefined;
-      }).catch(err => {
-        console.log(err);
-      });
-    },
     ethSignIn: function (event) {
       event.preventDefault();
       var text = 'Earthereum';
@@ -77,7 +52,7 @@ export default {
       .then((recovered) => {
         if (recovered === from) {
           console.log('Ethjs recovered the message signer!');
-          this.$router.push({path: 'signup'});
+          this.$router.push({path: 'market'});
         } else {
           console.log('Ethjs failed to recover the message signer!');
           console.dir({ recovered });
