@@ -10,7 +10,14 @@ import Vuetify from 'vuetify';
 Vue.use(Vuetify);
 import('../node_modules/vuetify/dist/vuetify.min.css');
 
+import contract from 'truffle-contract'
+
+import CreationContract from '../build/contracts/SpaceCreation.json'
+import CoreContract from '../build/contracts/SpaceCore.json'
+
 Vue.config.productionTip = false;
+
+window.contracts = {};
 
 window.addEventListener('load', function () {
   if (typeof web3 !== 'undefined') {
@@ -21,6 +28,16 @@ window.addEventListener('load', function () {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     window.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'))
   }
+
+  //  create contracts with new truffle-contract
+  window.contracts.Creation = contract(CreationContract);
+  window.contracts.Core = contract(CoreContract);
+
+  // Set the provider for our contracts
+  Object.keys(window.contracts).forEach(contract => {
+    console.log(contract);
+    window.contracts[contract].setProvider(window.web3.currentProvider);
+  });
 
   /* eslint-disable no-new */
   new Vue({

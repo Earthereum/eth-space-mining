@@ -27,6 +27,19 @@
                         <div>
                             hi there
                         </div>
+                        <v-btn round
+                                color="primary"
+                                dark
+                                class="white--text"
+                                v-on:click="createPromo"
+                        >
+                            Create Promo Planet
+                        </v-btn>
+                        <!--ol>
+                            <li v-for="planet in planets">
+                                {{ planet.text }}
+                            </li>
+                        </ol>-->
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -39,6 +52,51 @@
       computed: {
         planet () {
           return this.$store.getters.loadedPlanet(parseInt(this.id))
+        }
+      },
+      methods: {
+        createPromo: function (event) {
+          event.preventDefault();
+
+          var creationInstance, coreInstance;
+          var planetId;
+
+          window.contracts.Creation.deployed().then(function (instance) {
+            creationInstance = instance;
+
+            return creationInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
+          }).then(function (result) {
+            console.log(result.logs);
+
+            for (var i = 0; i < result.logs.length; i++) {
+              var log = result.logs[i];
+
+              if (log.event === 'Birth') {
+                console.log('Planet ID: ' + log.args.planetId);
+                planetId = log.args.planetId;
+                break;
+              }
+            }
+          }
+          ).catch(function (err) {
+            console.error(err);
+          });
+
+          window.contracts.Core.deployed().then(function (instance) {
+            coreInstance = instance;
+
+            return coreInstance.getPlanet.call(planetId, 0);
+          }).then(function (result) {
+            result.forEach((res) => {
+              if (res instanceof Object) {
+                console.log(res.toNumber());
+              } else {
+                console.log(res);
+              }
+            });
+          }).catch(function (err) {
+            console.error(err);
+          });
         }
       }
     }
