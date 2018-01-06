@@ -13,7 +13,8 @@
     "test/truffle": "truffle test test/truffle/*",
     "test/dapp": "npm run unit && npm run e2e",
     "test": "npm run test/truffle && npm run test/dapp",
-    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "preinstall": "node preinstall.js"
   },
   "dependencies": {
     "earthereum-renderer": "file:earthereum-planet-renderer",
