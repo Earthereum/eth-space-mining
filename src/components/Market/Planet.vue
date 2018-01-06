@@ -17,7 +17,9 @@
                             <v-icon>share</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-card-media contain :src="planet.src" height="400px"></v-card-media>
+                    <v-card-media contain height="400px">
+                      <planet-display :planet="createPlanet(planet.traits)"></planet-display>
+                    </v-card-media>
                 </v-card>
                 <v-card>
                     <v-card-text>
@@ -47,57 +49,61 @@
 </template>
 
 <script>
-    export default {
-      props: ['id'],
-      computed: {
-        planet () {
-          return this.$store.getters.loadedPlanet(parseInt(this.id))
-        }
-      },
-      methods: {
-        createPromo: function (event) {
-          event.preventDefault();
+  import {Planet} from 'earthereum-renderer';
+  export default {
+    props: ['id'],
+    computed: {
+      planet () {
+        return this.$store.getters.loadedPlanet(parseInt(this.id))
+      }
+    },
+    methods: {
+      createPromo: function (event) {
+        event.preventDefault();
 
-          var creationInstance, coreInstance;
-          var planetId;
+        var creationInstance, coreInstance;
+        var planetId;
 
-          window.contracts.Creation.deployed().then(function (instance) {
-            creationInstance = instance;
+        window.contracts.Creation.deployed().then(function (instance) {
+          creationInstance = instance;
 
-            return creationInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
-          }).then(function (result) {
-            console.log(result.logs);
+          return creationInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
+        }).then(function (result) {
+          console.log(result.logs);
 
-            for (var i = 0; i < result.logs.length; i++) {
-              var log = result.logs[i];
+          for (var i = 0; i < result.logs.length; i++) {
+            var log = result.logs[i];
 
-              if (log.event === 'Birth') {
-                console.log('Planet ID: ' + log.args.planetId);
-                planetId = log.args.planetId;
-                break;
-              }
+            if (log.event === 'Birth') {
+              console.log('Planet ID: ' + log.args.planetId);
+              planetId = log.args.planetId;
+              break;
             }
           }
-          ).catch(function (err) {
-            console.error(err);
-          });
-
-          window.contracts.Core.deployed().then(function (instance) {
-            coreInstance = instance;
-
-            return coreInstance.getPlanet.call(planetId, 0);
-          }).then(function (result) {
-            result.forEach((res) => {
-              if (res instanceof Object) {
-                console.log(res.toNumber());
-              } else {
-                console.log(res);
-              }
-            });
-          }).catch(function (err) {
-            console.error(err);
-          });
         }
+        ).catch(function (err) {
+          console.error(err);
+        });
+
+        window.contracts.Core.deployed().then(function (instance) {
+          coreInstance = instance;
+
+          return coreInstance.getPlanet.call(planetId, 0);
+        }).then(function (result) {
+          result.forEach((res) => {
+            if (res instanceof Object) {
+              console.log(res.toNumber());
+            } else {
+              console.log(res);
+            }
+          });
+        }).catch(function (err) {
+          console.error(err);
+        });
+      },
+      createPlanet (traits) {
+        return new Planet(traits);
       }
     }
+  }
 </script>

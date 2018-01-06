@@ -8,24 +8,48 @@ export const store = new Vuex.Store({
     loadedPlanets: [
       {
         title: 'Purple Planet',
-        src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VE9NJ/atmotest_1.png',
-        flex: 6,
+        traits: {
+          'seed': 4269992807,
+          'size': 0.648264182895851,
+          'water': 0.6049110922946656,
+          'atmoDensity': 0.20389500423370024,
+          'cloudDensity': 0.5450295176244095,
+          'baseColor': 'rgb(167,169,124)',
+          'accColor': 'rgb(138,203,177)',
+          'numTerrains': 7
+        },
         price: 0.034,
         link: '/planet/1',
         id: 1
       },
       {
         title: 'Brown Planet',
-        src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VER9C/atmotest_5.png',
-        flex: 6,
+        traits: {
+          'seed': 20377726,
+          'size': 0.686930208341419,
+          'water': 0.6374259102455546,
+          'atmoDensity': 0.3895655449709434,
+          'cloudDensity': 0.5928986110663819,
+          'baseColor': 'rgb(235,137,213)',
+          'accColor': 'rgb(61,81,113)',
+          'numTerrains': 5
+        },
         price: 0.568,
         link: '/planet/2',
         id: 2
       },
       {
         title: 'Blue Planet',
-        src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png',
-        flex: 6,
+        traits: {
+          'seed': 0x42069,
+          'size': 0.7,
+          'water': 0.5,
+          'atmoDensity': 0.5,
+          'cloudDensity': 0.5,
+          'baseColor': 0xa4be92,
+          'accColor': 0xf5dac3,
+          'numTerrains': 4
+        },
         price: 1.244,
         link: '/planet/3',
         id: 3

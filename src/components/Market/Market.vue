@@ -4,19 +4,19 @@
             <v-container fluid grid-list-md class="grey lighten-4">
                 <v-layout row wrap>
                     <v-flex
-                            v-bind="{ [`xs3`]: true }"
+                            xs3
                             v-for="card in cards"
                             :key="card.title"
                             style="cursor: pointer"
                     >
                         <v-card tile ripple raised :to="'/planet/' + card.id">
                             <v-card-media
-                                    :src="card.src"
                                     height="300px"
                             >
                                 <v-container fill-height fluid>
                                     <v-layout fill-height>
                                         <v-flex xs12 align-end flexbox>
+                                            <planet-display paused :planet="createPlanet(card.traits)"></planet-display>
                                         </v-flex>
                                     </v-layout>
                                 </v-container>
@@ -46,6 +46,7 @@
 </template>
 
 <script>
+  import {Planet} from 'earthereum-renderer';
   export default {
     computed: {
       cards () {
@@ -55,6 +56,9 @@
     methods: {
       onLoadPlanet (id) {
         this.$router.push('/planet/' + id)
+      },
+      createPlanet (traits) {
+        return new Planet(traits);
       }
     }
   }
