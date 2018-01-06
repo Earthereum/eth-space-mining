@@ -7,8 +7,10 @@
                             v-bind="{ [`xs3`]: true }"
                             v-for="card in cards"
                             :key="card.title"
+                            @click="onLoadPlanet(card.id)"
+                            style="cursor: pointer"
                     >
-                        <v-card tile="true" ripple="true" raised="true" :to="card.link">
+                        <v-card tile="true" ripple="true" raised="true">
                             <v-card-media
                                     :src="card.src"
                                     height="300px"
@@ -52,6 +54,11 @@
         { title: 'Brown Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8N5VER9C/atmotest_5.png', flex: 6, link: '/planet/2', id: 2 },
         { title: 'Blue Planet', src: 'https://files.slack.com/files-pri/T8KQ18934-F8NBU28AK/atmotest_4.png', flex: 6, link: '/planet/3', id: 3 }
       ]
-    })
+    }),
+    methods: {
+      onLoadPlanet (id) {
+        this.$router.push('/planet/' + id)
+      }
+    }
   }
 </script>
