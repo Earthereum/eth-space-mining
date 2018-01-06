@@ -6,7 +6,7 @@ module.exports = {
     // automatically uses dev Server port from /config.index.js
     // default: http://localhost:8080
     // see nightwatch.conf.js
-    const devServer = browser.globals.devServerURL
+    const devServer = browser.globals.devServerURL;
 
     browser
       .url(devServer)
@@ -16,4 +16,4 @@ module.exports = {
       .assert.elementCount('img', 1)
       .end()
   }
-}
+};

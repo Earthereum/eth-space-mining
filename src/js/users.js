@@ -8,14 +8,14 @@ const Users = {
   instance: null,
 
   init: function () {
-    let self = this
+    let self = this;
 
     return new Promise(function (resolve, reject) {
-      self.contract = contract(UsersContract)
-      self.contract.setProvider(window.web3.currentProvider)
+      self.contract = contract(UsersContract);
+      self.contract.setProvider(window.web3.currentProvider);
 
       self.contract.deployed().then(instance => {
-        self.instance = instance
+        self.instance = instance;
         resolve()
       }).catch(err => {
         reject(err)
@@ -24,7 +24,7 @@ const Users = {
   },
 
   exists: function (address) {
-    let self = this
+    let self = this;
 
     return new Promise((resolve, reject) => {
       self.instance.exists.call(
@@ -39,7 +39,7 @@ const Users = {
   },
 
   authenticate: function () {
-    let self = this
+    let self = this;
 
     return new Promise((resolve, reject) => {
       self.instance.authenticate.call(
@@ -53,7 +53,7 @@ const Users = {
   },
 
   create: function (pseudo) {
-    let self = this
+    let self = this;
 
     return new Promise((resolve, reject) => {
       self.instance.create(
@@ -68,7 +68,7 @@ const Users = {
   },
 
   destroy: function () {
-    let self = this
+    let self = this;
 
     return new Promise((resolve, reject) => {
       self.instance.destroy(
@@ -80,6 +80,6 @@ const Users = {
       })
     })
   }
-}
+};
 
 export default Users
