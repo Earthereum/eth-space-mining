@@ -34,6 +34,7 @@ export default new Router({
     {
       path: '/planet/:id',
       name: 'Planet',
+      props: true,
       component: Planet
     }
   ],

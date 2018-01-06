@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import Web3 from 'web3'
 import router from './router'
+import { store } from './store'
 
 import Vuetify from 'vuetify';
 Vue.use(Vuetify);
@@ -26,7 +27,8 @@ window.addEventListener('load', function () {
     el: '#app',
     router,
     template: '<App/>',
-    components: { App }
+    components: { App },
+    store
   })
 });
 
