@@ -1,0 +1,3 @@
+[submodule "earthereum-planet-renderer"]
+	path = earthereum-planet-renderer
+	url = https://github.com/Earthereum/earthereum-planet-renderer
