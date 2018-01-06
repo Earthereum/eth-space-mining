@@ -30,6 +30,11 @@ export default new Router({
       name: 'GitHub',
       component: DirectLink,
       props: {url: 'https://github.com/earthereum'}
+    },
+    {
+      path: '/planet/:id',
+      name: 'Planet',
+      component: Planet
     }
   ],
   mode: 'history'
