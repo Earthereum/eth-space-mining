@@ -9,7 +9,7 @@
                             :key="card.title"
                             style="cursor: pointer"
                     >
-                        <v-card tile="true" ripple="true" raised="true" :to="'/planet/' + card.id">
+                        <v-card tile ripple raised :to="'/planet/' + card.id">
                             <v-card-media
                                     :src="card.src"
                                     height="300px"
