@@ -154,7 +154,6 @@ contract SpaceBase is SpaceAccessControl {
         Birth(
             _owner,
             newplanetId,
-
             _Planet.genes
         );
 

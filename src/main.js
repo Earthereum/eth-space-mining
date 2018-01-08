@@ -38,7 +38,7 @@ window.addEventListener('load', function () {
 
   // Set the provider for our contracts
   Object.keys(window.contracts).forEach(contract => {
-    console.log(contract);
+    console.log('Loaded ' + contract);
     window.contracts[contract].setProvider(window.web3.currentProvider);
   });
 

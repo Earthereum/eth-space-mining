@@ -108,7 +108,18 @@ export const store = new Vuex.Store({
       registeredPlanets: ['p1']
     }
   },
-  mutations: {},
+  mutations: {
+    changeName (state, data) {
+      let planetId = data.planetId;
+      let name = data.name;
+      let planet = state.loadedPlanets[planetId - 1];
+      console.log('Planet: ' + planet);
+      console.log('Old name: ' + planet.title);
+      console.log('Change name to : ' + name);
+      planet.title = name;
+      console.log('New name: ' + planet.title);
+    }
+  },
   actions: {},
   getters: {
     loadedPlanets (state) {
