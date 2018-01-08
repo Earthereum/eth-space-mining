@@ -53,6 +53,54 @@ export const store = new Vuex.Store({
         price: 1.244,
         link: '/planet/3',
         id: 3
+      },
+      {
+        title: 'Alien Planet',
+        traits: {
+          'seed': 690625557,
+          'size': 0.6387981782007165,
+          'water': 0.035676267556373986,
+          'atmoDensity': 0.4855952513528312,
+          'cloudDensity': 0.30143945808636746,
+          'baseColor': 'rgb(75,56,83)',
+          'accColor': 'rgb(205,64,87)',
+          'numTerrains': 4
+        },
+        price: 0.820,
+        link: '/planet/4',
+        id: 4
+      },
+      {
+        title: 'Ocean World',
+        traits: {
+          'seed': 3342873783,
+          'size': 0.8325148179508891,
+          'water': 0.7674851820491109,
+          'atmoDensity': 0.377307366638442,
+          'cloudDensity': 0.47485182049110924,
+          'baseColor': 'rgb(155,76,103)',
+          'accColor': 'rgb(182,57,46)',
+          'numTerrains': 4
+        },
+        price: 0.421,
+        link: '/planet/5',
+        id: 5
+      },
+      {
+        title: 'Carbon Planet',
+        traits: {
+          'seed': 3542924439,
+          'size': 0.5275448695576838,
+          'water': 0.36646909398814564,
+          'atmoDensity': 0.327774417479894,
+          'cloudDensity': 0.632098950642872,
+          'baseColor': 'rgb(88,90,88)',
+          'accColor': 'rgb(25,21,21)',
+          'numTerrains': 4
+        },
+        price: 0.0591,
+        link: '/planet/6',
+        id: 6
       }
     ],
     user: {
