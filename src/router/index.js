@@ -15,6 +15,11 @@ export default new Router({
       component: Dashboard
     },
     {
+      path: '/home',
+      name: 'home',
+      component: Dashboard
+    },
+    {
       path: '/market',
       name: 'Market',
       component: Market
