@@ -41,16 +41,16 @@
                                 color="primary"
                                 dark
                                 class="white--text"
-                                v-on:click="changeName(name-text)"
+                                v-on:click="updateName(updateName)"
                         >
                             Change Name
                         </v-btn>
                         <v-text-field
                                       name="name-text"
                                       label="New Name"
-                                      value=""
+                                      value=updatedName
                                       class="input-group--focused"
-                                    ></v-text-field>
+                        ></v-text-field>
                         <!--ol>
                             <li v-for="planet in planets">
                                 {{ planet.text }}
@@ -119,9 +119,10 @@
           console.error(err);
         });
       },
-      changeName (name) {
+      updateName (name) {
         // change name
-        this.changeName(this.id, name);
+        this.updateName(this.id, name);
+        console.log('Changed name to ' + name);
       },
       createPlanet (traits) {
         return new Planet(traits);
@@ -129,7 +130,7 @@
     },
     beforeMount () {
       mapMutations({
-        changeName: 'changeName'
+        updateName: 'updateName'
       });
     }
   }
