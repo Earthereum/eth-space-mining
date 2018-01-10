@@ -37,25 +37,6 @@
                         >
                             Create Promo Planet
                         </v-btn>
-                        <v-btn round
-                                color="primary"
-                                dark
-                                class="white--text"
-                                v-on:click="changeName(name-text)"
-                        >
-                            Change Name
-                        </v-btn>
-                        <v-text-field
-                                      name="name-text"
-                                      label="New Name"
-                                      value=""
-                                      class="input-group--focused"
-                                    ></v-text-field>
-                        <!--ol>
-                            <li v-for="planet in planets">
-                                {{ planet.text }}
-                            </li>
-                        </ol>-->
                     </v-card-text>
                 </v-card>
             </v-flex>
@@ -64,7 +45,6 @@
 
 <script>
   import {Planet} from 'earthereum-renderer';
-  import { mapMutations } from 'vuex';
   export default {
     props: ['id'],
     computed: {
@@ -119,18 +99,9 @@
           console.error(err);
         });
       },
-      changeName (name) {
-        // change name
-        this.changeName(this.id, name);
-      },
       createPlanet (traits) {
         return new Planet(traits);
       }
-    },
-    beforeMount () {
-      mapMutations({
-        changeName: 'changeName'
-      });
     }
   }
 </script>
