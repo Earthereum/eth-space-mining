@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
-import Market from '@/components/Market/Market'
+import Market from '@/components/Market'
+import MyPlanets from '@/components/MyPlanets'
 import DirectLink from '@/components/DirectLink'
-import Planet from '@/components/Market/Planet'
+import Planet from '@/components/Planet'
 
 Vue.use(Router);
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/market',
       name: 'Market',
       component: Market
+    },
+    {
+      path: '/myplanets',
+      name: 'My Planets',
+      component: MyPlanets
     },
     {
       path: '/github',
