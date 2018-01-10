@@ -53,50 +53,38 @@
       }
     },
     methods: {
-      createPromo: function (event) {
+      createPromo: async function (event) {
         event.preventDefault();
 
-        var creationInstance, coreInstance;
-        var planetId;
+        // get deployed SpaceCore instance
+        const coreInstance = await window.contracts.Core.deployed();
 
-        window.contracts.Creation.deployed().then(function (instance) {
-          creationInstance = instance;
+        // create a new promo planet
+        const promoResult = await coreInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
+        console.log(promoResult.logs);
 
-          return creationInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
-        }).then(function (result) {
-          console.log(result.logs);
+        let planetId = 0;
+        for (let i = 0; i < promoResult.logs.length; i++) {
+          const log = promoResult.logs[i];
 
-          for (var i = 0; i < result.logs.length; i++) {
-            var log = result.logs[i];
-
-            if (log.event === 'Birth') {
-              console.log('Planet ID: ' + log.args.planetId);
-              console.log('Genes: ' + log.args.genes);
-              console.log('Owner: ' + log.args.owner);
-              planetId = log.args.planetId;
-
-              break;
-            }
+          if (log.event === 'Birth') {
+            planetId = log.args.planetId;
+            console.log('Planet ID: ' + log.args.planetId);
+            console.log('Genes: ' + log.args.genes);
+            console.log('Owner: ' + log.args.owner);
+            planetId = log.args.planetId;
+            break;
           }
         }
-        ).catch(function (err) {
-          console.error(err);
-        });
 
-        window.contracts.Core.deployed().then(function (instance) {
-          coreInstance = instance;
-
-          return coreInstance.getPlanet.call(planetId, 0);
-        }).then(function (result) {
-          result.forEach((res) => {
-            if (res instanceof Object) {
-              console.log(res.toNumber());
-            } else {
-              console.log(res);
-            }
-          });
-        }).catch(function (err) {
-          console.error(err);
+        // retrieve newly-created planet
+        const getResult = await coreInstance.getPlanet.call(planetId);
+        getResult.forEach((res) => {
+          if (res instanceof Object) {
+            console.log(res.toNumber());
+          } else {
+            console.log(res);
+          }
         });
       },
       createPlanet (traits) {

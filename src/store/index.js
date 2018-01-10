@@ -130,6 +130,20 @@ export const store = new Vuex.Store({
       commit('setLoadedPlanets', tempPlanets);
     },
     fetchMyPlanets ({commit}, {self}) {
+      const planetId = 1;
+      window.contracts.Core.deployed().then(coreInstance =>
+        coreInstance.getPlanet.call(planetId))
+        .then(result => {
+          result.forEach((res) => {
+            if (res instanceof Object) {
+              console.log(res.toString(16));
+            } else {
+              console.log(res);
+            }
+          });
+        })
+        .catch((err) => console.error(err));
+
       const tempPlanets = [
         {
           title: 'Blue Planet',
