@@ -64,7 +64,8 @@ export const store = new Vuex.Store({
           'cloudDensity': 0.30143945808636746,
           'baseColor': 'rgb(75,56,83)',
           'accColor': 'rgb(205,64,87)',
-          'numTerrains': 4
+          'numTerrains': 4,
+          'ring': true
         },
         price: 0.820,
         link: '/planet/4',

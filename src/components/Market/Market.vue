@@ -9,11 +9,11 @@
                             :key="card.title"
                             style="cursor: pointer"
                     >
-                        <v-card tile ripple raised :to="'/planet/' + card.id">
+                        <v-card tile ripple raised>
                             <v-card-media
                                     height="300px"
                             >
-                                <v-container fill-height fluid>
+                                <v-container fill-height fluid v-on:click="onLoadPlanet(card.id)">
                                     <v-layout fill-height>
                                         <v-flex xs12 align-end flexbox>
                                             <planet-display paused :planet="createPlanet(card.traits)"></planet-display>

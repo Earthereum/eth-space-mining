@@ -64,7 +64,7 @@
     data: () => ({
       drawer: false,
       menuItems: [
-        {title: 'Home', link: '/'},
+        {title: 'Home', link: '/home'},
         {title: 'Market', link: '/market'},
         {title: 'Planet', link: '/planet/1'},
         {title: 'About', link: '/about'},
