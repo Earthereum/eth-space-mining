@@ -17,6 +17,7 @@ import contract from 'truffle-contract'
 
 import CreationContract from '../build/contracts/SpaceCreation.json'
 import CoreContract from '../build/contracts/SpaceCore.json'
+import OwnershipContract from '../build/contracts/SpaceOwnership.json'
 
 Vue.config.productionTip = false;
 
@@ -35,6 +36,7 @@ window.addEventListener('load', function () {
   //  create contracts with new truffle-contract
   window.contracts.Creation = contract(CreationContract);
   window.contracts.Core = contract(CoreContract);
+  window.contracts.Ownership = contract(OwnershipContract);
 
   // Set the provider for our contracts
   Object.keys(window.contracts).forEach(contract => {
