@@ -53,6 +53,9 @@
         return this.$store.getters.loadedPlanets
       }
     },
+    created () {
+      this.$store.dispatch('fetchMarketPlanets', {self: this});
+    },
     methods: {
       onLoadPlanet (id) {
         this.$router.push('/planet/' + id)
