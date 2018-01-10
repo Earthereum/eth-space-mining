@@ -34,6 +34,7 @@
         {title: 'Home', link: '/home'},
         {title: 'Market', link: '/market'},
         {title: 'My Planets', link: '/myplanets'},
+        {title: 'Admin', link: '/_admin'},
         {title: 'About', link: '/about'},
         {title: 'GitHub', link: '/github'}
       ]

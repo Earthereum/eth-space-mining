@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Dashboard from '@/components/Dashboard'
 import Market from '@/components/Market'
 import MyPlanets from '@/components/MyPlanets'
+import Admin from '@/components/Admin'
 import DirectLink from '@/components/DirectLink'
 import Planet from '@/components/Planet'
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/myplanets',
       name: 'My Planets',
       component: MyPlanets
+    },
+    {
+      path: '/_admin',
+      name: 'Admin',
+      component: Admin
     },
     {
       path: '/github',
