@@ -130,6 +130,13 @@ export const store = new Vuex.Store({
       commit('setLoadedPlanets', tempPlanets);
     },
     fetchMyPlanets ({commit}, {self}) {
+      // use Ownership contract to track a user's planets
+      window.contracts.Ownership.deployed().then(instance =>
+        instance.tokensOfOwner.call(window.web3.eth.accounts[0]))
+      .then(result => console.log('Tokens of Address (' +
+        window.web3.eth.accounts[0] + '): ' + result))
+      .catch(err => console.error(err));
+
       const planetId = 1;
       window.contracts.Core.deployed().then(coreInstance =>
         coreInstance.getPlanet.call(planetId))
