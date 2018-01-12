@@ -47,6 +47,8 @@
 
 <script>
   import {Planet} from 'earthereum-renderer';
+  import {processGenome} from '../util';
+
   export default {
     data: {
       loadedPlanets: []
