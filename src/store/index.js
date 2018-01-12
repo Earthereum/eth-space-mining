@@ -149,7 +149,7 @@ export const store = new Vuex.Store({
         } else {
           console.log(res);
         }
-      }).catch(err => console.error(err));
+      });
 
       const tempPlanets = [
         {
