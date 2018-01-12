@@ -57,25 +57,6 @@
       }
     },
     async created () {
-      const tempPlanets = [
-        {
-          title: 'Blue Planet',
-          traits: {
-            'seed': 0x42069,
-            'size': 0.7,
-            'water': 0.5,
-            'atmoDensity': 0.5,
-            'cloudDensity': 0.5,
-            'baseColor': 0xa4be92,
-            'accColor': 0xf5dac3,
-            'numTerrains': 4
-          },
-          price: 1.244,
-          link: '/planet/3',
-          id: 3
-        }
-      ];
-      this.loadedPlanets = tempPlanets;
       // use Core contract to track a user's planets
       const coreInstance = await window.contracts.Core.deployed();
       const tokens = await coreInstance.tokensOfOwner
@@ -84,18 +65,20 @@
       console.log('Tokens of Address (' +
         window.web3.eth.accounts[0] + '): ' + tokens);
 
+      let myPlanets = [];
+      tokens.forEach(async function (planetId) {
+        let id = planetId.toNumber();
+        let planet = await processGenome(id);
+        myPlanets.push(planet);
+        console.log(myPlanets[myPlanets.length - 1]);
+      });
+
       // const totalSupply = await coreInstance.totalSupply.call();
       // console.log('Total Planets: ' + totalSupply);
 
-      const planetId = 1;
-      const planetResult = await coreInstance.getPlanet.call(planetId);
-      planetResult.forEach((res) => {
-        if (res instanceof Object) {
-          console.log(res.toString(16));
-        } else {
-          console.log(res);
-        }
-      });
+      // const tempPlanets = myPlanets;
+
+      this.loadedPlanets = myPlanets;
     },
     methods: {
       onLoadPlanet (id) {
