@@ -6,7 +6,21 @@
         <h1>{{ msg }}</h1>
         <div id="sign-in-button">
           <v-btn color="primary" v-on:click="ethSignIn" v-if="user == null">Sign In</v-btn>
-          <v-btn color="primary" v-on:click="ethSignIn" v-else>Sign Out</v-btn>
+          <v-btn color="primary" @click.native="snackbar1=true" v-on:click="ethSignIn" v-else>Sign Out</v-btn>
+          <v-snackbar
+            :timeout="4000"
+            v-model="snackbar1"
+            >
+            User has been logged out.
+            <v-btn dark flat @click.native="snackbar1 = false">Close</v-btn>
+          </v-snackbar>
+          <v-snackbar
+            :timeout="4000"
+            v-model="snackbar_undefined"
+            >
+            User not found. Are you signed into Metamask?
+            <v-btn dark flat @click.native="snackbar_undefined = false">Close</v-btn>
+          </v-snackbar>
         </div>
       </div>
     </v-flex>
@@ -25,6 +39,8 @@ export default {
     return {
       msg: 'Welcome to Earthereum',
       pseudo: undefined,
+      snackbar1: false,
+      snackbar_undefined: false,
       demoPlanet: new Planet({
         'seed': 0x42069,
         'size': 0.7,
@@ -56,6 +72,11 @@ export default {
       var text = 'Earthereum';
       var msg = ethUtil.bufferToHex(new Buffer(text, 'utf8'));
       var from = window.web3.eth.accounts[0];
+
+      if (from === undefined) {
+        this.snackbar_undefined = true;
+        return;
+      }
 
       console.log('CLICKED, SENDING PERSONAL SIGN REQ');
 
