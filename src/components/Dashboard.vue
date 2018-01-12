@@ -17,6 +17,7 @@
           <v-snackbar
             :timeout="4000"
             v-model="snackbar_undefined"
+            color="error"
             >
             User not found. Are you signed into Metamask?
             <v-btn dark flat @click.native="snackbar_undefined = false">Close</v-btn>
