@@ -40,6 +40,7 @@
 
 <script>
   import {Planet} from 'earthereum-renderer';
+  import {processGenome} from '../util.js';
   export default {
     props: ['id'],
     data: () => {
@@ -48,10 +49,8 @@
       };
     },
     async created () {
-      const coreInstance = await window.contracts.Core.deployed();
-      const planetResult = await coreInstance.getPlanet.call(this.id);
-      const genome = planetResult[5];
-      console.log(genome.toString(16))
+      const data = await processGenome(this.id);
+      this.planet = data;
     },
     methods: {
       createPlanet (traits) {
