@@ -2,6 +2,9 @@
         <v-layout fluid>
             <v-flex>
                 <v-card color="black">
+                  <v-alert v-if="error" color="error" icon="warning" value="true">
+                    Couldn't get this planet from the Ethereum network.
+                  </v-alert>
                     <v-card-title>
                         <v-btn v-if="planet"
                                 round
@@ -17,17 +20,19 @@
                             <v-icon>share</v-icon>
                         </v-btn>
                     </v-card-title>
-                    <v-card-media contain height="400px" >
-                      <planet-display v-if="planet" :planet="createPlanet(planet.traits)"></planet-display>
-                      <v-layout v-else row justify-space-around>
+                    <v-card-media contain height="400px">
+                      <v-slide-y-transition>
+                        <planet-display v-if="planet" :planet="createPlanet(planet.traits)"></planet-display>
+                      </v-slide-y-transition>
+                      <v-layout v-if="!planet && !error" row justify-space-around>
                         <v-progress-circular indeterminate :size="70" color="white"></v-progress-circular>
                       </v-layout>
                     </v-card-media>
                 </v-card>
                 <v-card>
-                    <v-card-text>
+                    <v-card-text v-if="planet">
                         <div>
-                            <h1 v-if="planet">{{ planet.title }}</h1>
+                            <h1>{{ planet.title }}</h1>
                         </div>
                         <div>
                             hi there
@@ -45,12 +50,17 @@
     props: ['id'],
     data: () => {
       return {
-        planet: null
+        planet: null,
+        error: false
       };
     },
     async created () {
-      const data = await processGenome(this.id);
-      this.planet = data;
+      try {
+        const data = await processGenome(this.id);
+        this.planet = data;
+      } catch (e) {
+        this.error = true;
+      }
     },
     methods: {
       createPlanet (traits) {
