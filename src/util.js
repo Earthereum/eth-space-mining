@@ -19,7 +19,7 @@ export async function processGenome (id) {
       'accColor': mapper.lookup('accColor').toString(16),
       'numTerrains': mapper.lookup('numTerrains') + 2
     },
-    price: Math.random(),
+    price: computePrice(),
     link: '/planet/' + id,
     id: id
   }
@@ -29,4 +29,8 @@ async function getGenome (id) {
   const coreInstance = await window.contracts.Core.deployed();
   let planetResult = await coreInstance.getPlanet.call(id);
   return planetResult[5];
+}
+
+function computePrice () {
+  return Math.ceil(Math.random() * 10000) / 10000;
 }
