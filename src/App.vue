@@ -29,16 +29,30 @@
   export default {
     name: 'Earthereum',
     data: () => ({
-      drawer: false,
-      menuItems: [
-        {title: 'Home', link: '/home'},
-        {title: 'Market', link: '/market'},
-        {title: 'My Planets', link: '/myplanets'},
-        {title: 'Admin', link: '/_admin'},
-        {title: 'About', link: '/about'},
-        {title: 'GitHub', link: '/github'}
-      ]
+      drawer: false
     }),
+    computed: {
+      menuItems () {
+        let menuItems = [
+          {title: 'Home', link: '/home'},
+          {title: 'Market', link: '/market'},
+          {title: 'About', link: '/about'},
+          {title: 'GitHub', link: '/github'}
+        ];
+        if (this.$store.getters.user !== null && this.$store.getters.user !== undefined) {
+          menuItems = [
+            {title: 'Home', link: '/home'},
+            {title: 'Market', link: '/market'},
+            {title: 'My Planets', link: '/myplanets'},
+            {title: 'Admin', link: '/_admin'},
+            {title: 'About', link: '/about'},
+            {title: 'GitHub', link: '/github'}
+          ];
+        }
+        return menuItems;
+      }
+    },
+
     props: {
       source: String
     }

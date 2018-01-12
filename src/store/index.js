@@ -6,10 +6,7 @@ Vue.use(Vuex);
 export const store = new Vuex.Store({
   state: {
     loadedPlanets: [],
-    user: {
-      id: 'admin',
-      registeredPlanets: ['p1']
-    }
+    user: null
   },
   mutations: {
     setLoadedPlanets (state, planets) {
@@ -24,6 +21,9 @@ export const store = new Vuex.Store({
       console.log('Change name to : ' + name);
       planet.title = name;
       console.log('New name: ' + planet.title);
+    },
+    setUser (state, data) {
+      state.user = data;
     }
   },
   actions: {
@@ -170,6 +170,9 @@ export const store = new Vuex.Store({
         }
       ];
       commit('setLoadedPlanets', tempPlanets);
+    },
+    addUser ({commit}, data) {
+      commit('setUser', data);
     }
   },
   getters: {
@@ -184,6 +187,9 @@ export const store = new Vuex.Store({
           return planet.id === planetId;
         })
       }
+    },
+    user (state) {
+      return state.user
     }
   }
 })

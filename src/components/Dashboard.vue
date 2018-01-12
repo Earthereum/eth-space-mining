@@ -5,7 +5,8 @@
         <planet-display :planet="demoPlanet"></planet-display>
         <h1>{{ msg }}</h1>
         <div id="sign-in-button">
-          <v-btn color="primary" v-on:click="ethSignIn">Sign In</v-btn>
+          <v-btn color="primary" v-on:click="ethSignIn" v-if="user == null">Sign In</v-btn>
+          <v-btn color="primary" v-on:click="ethSignIn" v-else>Sign Out</v-btn>
         </div>
       </div>
     </v-flex>
@@ -37,13 +38,21 @@ export default {
     };
   },
   computed: {
-    userExists: function () {
-      return (typeof this.pseudo !== 'undefined')
+    user () {
+      return this.$store.getters.user;
     }
   },
   methods: {
     ethSignIn: function (event) {
       event.preventDefault();
+      if (this.user !== null) {
+        console.log('Logging user out.');
+        console.log(this.user);
+        this.$store.dispatch('addUser', null);
+        console.log(this.user);
+        console.log('User has been logged out.');
+        return;
+      }
       var text = 'Earthereum';
       var msg = ethUtil.bufferToHex(new Buffer(text, 'utf8'));
       var from = window.web3.eth.accounts[0];
@@ -63,6 +72,9 @@ export default {
       .then((recovered) => {
         if (recovered === from) {
           console.log('Ethjs recovered the message signer!');
+          this.$store.dispatch('addUser', {address: from, loggedIn: true});
+          console.log('Logged in:')
+          console.log(this.user);
           this.$router.push({path: 'market'});
         } else {
           console.log('Ethjs failed to recover the message signer!');
