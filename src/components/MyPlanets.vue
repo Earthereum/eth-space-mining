@@ -50,8 +50,10 @@
   import {processGenome} from '../util';
 
   export default {
-    data: {
-      loadedPlanets: []
+    data: () => {
+      return {
+        loadedPlanets: []
+      }
     },
     computed: {
       cards () {
@@ -67,20 +69,17 @@
       console.log('Tokens of Address (' +
         window.web3.eth.accounts[0] + '): ' + tokens);
 
-      let myPlanets = [];
-      tokens.forEach(async function (planetId) {
+      tokens.forEach(async planetId => {
         let id = planetId.toNumber();
         let planet = await processGenome(id);
-        myPlanets.push(planet);
-        console.log(myPlanets[myPlanets.length - 1]);
+        let idx = this.loadedPlanets.push(planet);
+        console.log(this.loadedPlanets[idx]);
       });
 
       // const totalSupply = await coreInstance.totalSupply.call();
       // console.log('Total Planets: ' + totalSupply);
 
       // const tempPlanets = myPlanets;
-
-      this.loadedPlanets = myPlanets;
     },
     methods: {
       onLoadPlanet (id) {
