@@ -129,27 +129,27 @@ export const store = new Vuex.Store({
       ];
       commit('setLoadedPlanets', tempPlanets);
     },
-    fetchMyPlanets ({commit}, {self}) {
+    async fetchMyPlanets ({commit}, {self}) {
       // use Core contract to track a user's planets
-      window.contracts.Core.deployed().then(instance =>
-        instance.tokensOfOwner.call(window.web3.eth.accounts[0]))
-      .then(result => console.log('Tokens of Address (' +
-        window.web3.eth.accounts[0] + '): ' + result))
-      .catch(err => console.error(err));
+      const coreInstance = await window.contracts.Core.deployed();
+      const tokens = await coreInstance.tokensOfOwner
+        .call(window.web3.eth.accounts[0]);
+
+      console.log('Tokens of Address (' +
+        window.web3.eth.accounts[0] + '): ' + tokens);
+
+      // const totalSupply = await coreInstance.totalSupply.call();
+      // console.log('Total Planets: ' + totalSupply);
 
       const planetId = 1;
-      window.contracts.Core.deployed().then(coreInstance =>
-        coreInstance.getPlanet.call(planetId))
-        .then(result => {
-          result.forEach((res) => {
-            if (res instanceof Object) {
-              console.log(res.toString(16));
-            } else {
-              console.log(res);
-            }
-          });
-        })
-        .catch((err) => console.error(err));
+      const planetResult = await coreInstance.getPlanet.call(planetId);
+      planetResult.forEach((res) => {
+        if (res instanceof Object) {
+          console.log(res.toString(16));
+        } else {
+          console.log(res);
+        }
+      }).catch(err => console.error(err));
 
       const tempPlanets = [
         {
