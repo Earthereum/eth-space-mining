@@ -60,7 +60,7 @@ export default {
     }
   },
   methods: {
-    ethSignIn: function (event) {
+    async ethSignIn (event) {
       event.preventDefault();
       if (this.user !== null) {
         console.log('Logging user out.');
@@ -70,9 +70,10 @@ export default {
         console.log('User has been logged out.');
         return;
       }
-      var text = 'Earthereum';
-      var msg = ethUtil.bufferToHex(new Buffer(text, 'utf8'));
-      var from = window.web3.eth.accounts[0];
+
+      const text = 'Earthereum';
+      const msg = ethUtil.bufferToHex(new Buffer(text, 'utf8'));
+      const from = window.web3.eth.accounts[0];
 
       if (from === undefined) {
         this.snackbar_undefined = true;
@@ -82,27 +83,23 @@ export default {
       console.log('CLICKED, SENDING PERSONAL SIGN REQ');
 
       // Use Eth.js
-      var eth = new Eth(window.web3.currentProvider);
+      const eth = new Eth(window.web3.currentProvider);
 
-      eth.personal_sign(msg, from)
-      .then((signed) => {
-        console.log('Signed!  Result is: ', signed);
-        console.log('Recovering...');
+      const signed = await eth.personal_sign(msg, from);
+      console.log('Signed!  Result is: ', signed);
+      console.log('Recovering...');
 
-        return eth.personal_ecRecover(msg, signed);
-      })
-      .then((recovered) => {
-        if (recovered === from) {
-          console.log('Ethjs recovered the message signer!');
-          this.$store.dispatch('addUser', {address: from, loggedIn: true});
-          console.log('Logged in:')
-          console.log(this.user);
-          this.$router.push({path: 'market'});
-        } else {
-          console.log('Ethjs failed to recover the message signer!');
-          console.dir({ recovered });
-        }
-      });
+      const recovered = await eth.personal_ecRecover(msg, signed);
+      if (recovered === from) {
+        console.log('Ethjs recovered the message signer!');
+        this.$store.dispatch('addUser', {address: from, loggedIn: true});
+        console.log('Logged in:')
+        console.log(this.user);
+        this.$router.push({path: 'market'});
+      } else {
+        console.log('Ethjs failed to recover the message signer!');
+        console.dir({ recovered });
+      }
     }
   }
 }

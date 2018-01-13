@@ -1,7 +1,8 @@
 import {GenomeMapper, DEMO_MAPPING} from './genome.js';
 
 export async function processGenome (id) {
-  let genome = await getGenome(id);
+  let planet = await getPlanet(id);
+  let genome = planet.genome;
 
   console.log('Genome: ' + genome.toString(16));
 
@@ -10,7 +11,7 @@ export async function processGenome (id) {
   return {
     title: 'Planet ' + id,
     traits: {
-      'seed': genome.modulo(0x10000).toNumber(),
+      'seed': mapper.sliceNumber(0, 32),
       'size': mapper.lookup('size') / (2 ** 4 * 2) + 0.5,
       'water': mapper.lookup('water') / 2 ** 4,
       'atmoDensity': mapper.lookup('atmoDensity') / 2 ** 4,
@@ -25,10 +26,12 @@ export async function processGenome (id) {
   }
 }
 
-async function getGenome (id) {
+async function getPlanet (id) {
   const coreInstance = await window.contracts.Core.deployed();
   let planetResult = await coreInstance.getPlanet.call(id);
-  return planetResult[5];
+  return {
+    genome: planetResult[5]
+  };
 }
 
 function computePrice () {
