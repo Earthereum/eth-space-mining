@@ -18,7 +18,8 @@ export async function processGenome (id) {
       'cloudDensity': mapper.lookup('cloudDensity'),
       'baseColor': mapper.lookup('baseColor').toString(16),
       'accColor': mapper.lookup('accColor').toString(16),
-      'numTerrains': mapper.lookup('numTerrains')
+      'numTerrains': mapper.lookup('numTerrains'),
+      'ring': mapper.lookup('ring')
     },
     price: computePrice(),
     link: '/planet/' + id,

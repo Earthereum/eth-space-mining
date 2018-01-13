@@ -10,6 +10,9 @@ export class GenomeMapper {
 
   /**
    * Extracts a range of bits from the genome as a list.
+   * @param from start index in bits
+   * @param len length in bits
+   * @return a list of bits (as 0/1 ints)
    */
   slice (from, len) {
     if (from < 0 || from >= GENOME_LEN) {
@@ -24,6 +27,9 @@ export class GenomeMapper {
 
   /**
    * Extracts a range of bits from the genome as a string.
+   * @param from start index in bits
+   * @param len length in bits
+   * @return a string of bits
    */
   sliceString (from, len) {
     return this.slice(from, len).join('');
@@ -31,6 +37,9 @@ export class GenomeMapper {
 
   /**
    * Extracts a range of bits from the genome as a number.
+   * @param from start index in bits
+   * @param len length in bits
+   * @return an int
    */
   sliceNumber (from, len) {
     return Number.parseInt(this.sliceString(from, len), 2);
@@ -38,6 +47,8 @@ export class GenomeMapper {
 
   /**
    * Looks up the value of a particular genotype in this genome.
+   * @param genotype the name of the genotype
+   * @return the value of the genotype
    */
   lookup (genotype) {
     const {map} = this;
@@ -46,95 +57,98 @@ export class GenomeMapper {
     }
 
     const mapping = map[genotype];
-    if (mapping.type === 'float') {
-      const val = this.sliceNumber(mapping._pos, mapping.len) / 2 ** mapping.len;
-      return mapping.min + val * (mapping.max - mapping.min);
+    if (mapping.type === 'fixed') {
+      const [min, max] = mapping.range;
+      const val = this.sliceNumber(mapping._pos, mapping.bits) / 2 ** mapping.bits;
+      return min + val * (max - min);
     }
     if (mapping.type === 'int') {
-      const val = this.sliceNumber(mapping._pos, mapping.len);
+      const val = this.sliceNumber(mapping._pos, mapping.bits);
       return val;
     }
+    if (mapping.type === 'bool') {
+      const val = this.sliceNumber(mapping._pos, mapping.bits);
+      return !!val;
+    }
     if (mapping.type === 'string') {
-      return this.sliceString(mapping._pos, mapping.len);
+      return this.sliceString(mapping._pos, mapping.bits);
     }
     return null;
   }
 
   /**
-   * Augments a genome mapping with position values, etc
+   * Prepares a raw genome mapping for use with a GenomeMapper.
+   * A mapping is a dictionary of genotype names and their formats.
+   * A genome can have one of several types:
+   *  * bool - a single bit indicating a boolean value
+   *  * int - an arbitrarily-sized int
+   *      bits: the size of this int in bits
+   *  * fixed - an int that will be mapped to a float over a given range
+   *      bits: the size of this fixed number in bits
+   *      range: a 2-tuple in the form [min, max]. Defaults to [0,1]
+   *  * string - a bitstring
+   *      bits: the size of the bitstring
    */
   static createMap (data) {
     let ptr = 0;
     for (let k of Object.keys(data)) {
       const item = data[k];
 
-      // make sure there are more genome bits available
-      if (ptr + item.len >= GENOME_LEN) {
-        throw new Error(`No more space in genome for key ${k}`);
+      // normalize parameters
+      if (item.type === 'fixed') {
+        if (!item.hasOwnProperty('range')) {
+          item.range = [0, 1];
+        }
+      }
+      if (item.type === 'bool') {
+        item.bits = 1;
       }
 
-      // normalize parameters
-      if (item.type === 'float') {
-        GenomeMapper._fixFloatMapping(item);
-      }
-      if (item.type === 'int') {
-        GenomeMapper._fixIntMapping(item);
+      // make sure there are more genome bits available
+      if (ptr + item.bits >= GENOME_LEN) {
+        throw new Error(`No more space in genome for key ${k}`);
       }
 
       // allocate bits
       data[k]._pos = ptr;
-      ptr += item.len;
+      ptr += item.bits;
     }
     return data;
-  }
-
-  static _fixFloatMapping (item) {
-    if (item.hasOwnProperty('max')) {
-      if (!item.hasOwnProperty('min')) {
-        item.min = 0;
-      }
-    } else {
-      item.max = 1;
-      item.min = 0;
-    }
-  }
-
-  static _fixIntMapping (item) {
-
   }
 }
 
 export const DEMO_MAPPING = GenomeMapper.createMap({
   'size': {
-    'type': 'float',
-    'len': 4,
-    'min': 0.5,
-    'max': 1.0
+    'type': 'fixed',
+    'bits': 4,
+    'range': [0.5, 1]
   },
   'water': {
-    'type': 'float',
-    'len': 4
+    'type': 'fixed',
+    'bits': 4
   },
   'atmoDensity': {
-    'type': 'float',
-    'len': 4
+    'type': 'fixed',
+    'bits': 4
   },
   'cloudDensity': {
-    'type': 'float',
-    'len': 4
+    'type': 'fixed',
+    'bits': 4
   },
   'baseColor': {
     'type': 'int',
-    'len': 24
+    'bits': 24
   },
   'accColor': {
     'type': 'int',
-    'len': 24
+    'bits': 24
   },
   'numTerrains': {
-    'type': 'float',
-    'len': 2,
-    'min': 2,
-    'max': 6
+    'type': 'fixed',
+    'bits': 2,
+    'range': [2, 6]
+  },
+  'ring': {
+    'type': 'bool'
   }
 });
