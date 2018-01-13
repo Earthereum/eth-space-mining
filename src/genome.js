@@ -46,8 +46,13 @@ export class GenomeMapper {
     }
 
     const mapping = map[genotype];
-    if (mapping.type === 'number') {
-      return this.sliceNumber(mapping._pos, mapping.len);
+    if (mapping.type === 'float') {
+      const val = this.sliceNumber(mapping._pos, mapping.len) / 2 ** mapping.len;
+      return mapping.min + val * (mapping.max - mapping.min);
+    }
+    if (mapping.type === 'int') {
+      const val = this.sliceNumber(mapping._pos, mapping.len);
+      return val;
     }
     if (mapping.type === 'string') {
       return this.sliceString(mapping._pos, mapping.len);
@@ -56,49 +61,80 @@ export class GenomeMapper {
   }
 
   /**
-   * Augments a genome mapping with position values.
+   * Augments a genome mapping with position values, etc
    */
   static createMap (data) {
     let ptr = 0;
     for (let k of Object.keys(data)) {
-      const len = data[k].len;
-      if (ptr + len >= GENOME_LEN) {
+      const item = data[k];
+
+      // make sure there are more genome bits available
+      if (ptr + item.len >= GENOME_LEN) {
         throw new Error(`No more space in genome for key ${k}`);
       }
+
+      // normalize parameters
+      if (item.type === 'float') {
+        GenomeMapper._fixFloatMapping(item);
+      }
+      if (item.type === 'int') {
+        GenomeMapper._fixIntMapping(item);
+      }
+
+      // allocate bits
       data[k]._pos = ptr;
-      ptr += len;
+      ptr += item.len;
     }
     return data;
+  }
+
+  static _fixFloatMapping (item) {
+    if (item.hasOwnProperty('max')) {
+      if (!item.hasOwnProperty('min')) {
+        item.min = 0;
+      }
+    } else {
+      item.max = 1;
+      item.min = 0;
+    }
+  }
+
+  static _fixIntMapping (item) {
+
   }
 }
 
 export const DEMO_MAPPING = GenomeMapper.createMap({
   'size': {
-    'type': 'number',
-    'len': 4
+    'type': 'float',
+    'len': 4,
+    'min': 0.5,
+    'max': 1.0
   },
   'water': {
-    'type': 'number',
+    'type': 'float',
     'len': 4
   },
   'atmoDensity': {
-    'type': 'number',
+    'type': 'float',
     'len': 4
   },
   'cloudDensity': {
-    'type': 'number',
+    'type': 'float',
     'len': 4
   },
   'baseColor': {
-    'type': 'number',
+    'type': 'int',
     'len': 24
   },
   'accColor': {
-    'type': 'number',
+    'type': 'int',
     'len': 24
   },
   'numTerrains': {
-    'type': 'number',
-    'len': 2
+    'type': 'float',
+    'len': 2,
+    'min': 2,
+    'max': 6
   }
 });

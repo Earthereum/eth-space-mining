@@ -12,13 +12,13 @@ export async function processGenome (id) {
     title: 'Planet ' + id,
     traits: {
       'seed': mapper.sliceNumber(0, 32),
-      'size': mapper.lookup('size') / (2 ** 4 * 2) + 0.5,
-      'water': mapper.lookup('water') / 2 ** 4,
-      'atmoDensity': mapper.lookup('atmoDensity') / 2 ** 4,
-      'cloudDensity': mapper.lookup('cloudDensity') / 2 ** 4,
+      'size': mapper.lookup('size'),
+      'water': mapper.lookup('water'),
+      'atmoDensity': mapper.lookup('atmoDensity'),
+      'cloudDensity': mapper.lookup('cloudDensity'),
       'baseColor': mapper.lookup('baseColor').toString(16),
       'accColor': mapper.lookup('accColor').toString(16),
-      'numTerrains': mapper.lookup('numTerrains') + 2
+      'numTerrains': mapper.lookup('numTerrains')
     },
     price: computePrice(),
     link: '/planet/' + id,
