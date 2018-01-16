@@ -6,6 +6,7 @@ import MyPlanets from '@/components/MyPlanets'
 import Admin from '@/components/Admin'
 import DirectLink from '@/components/DirectLink'
 import Planet from '@/components/Planet'
+import About from '@/components/About'
 
 Vue.use(Router);
 
@@ -47,6 +48,11 @@ export default new Router({
       name: 'Planet',
       props: true,
       component: Planet
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: About
     }
   ],
   mode: 'history'
