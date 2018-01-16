@@ -1,6 +1,13 @@
 # Ethereum Space Mining Game
 WIP
 
+## Running locally
+*using [`ganache-cli`](https://github.com/trufflesuite/ganache-cli), [`truffle`](http://truffleframework.com/), and [`npm`](https://nodejs.org/en/)*
+1. Run `ganache-cli`. Import an account into Metamask.
+2. Compile smart contracts with `truffle compile`
+3. Deploy smart contracts to ganache `truffle deploy`
+4. Start the development server with `npm run dev`
+
 <hr>
 
 # Vue.js truffle box
