@@ -16,8 +16,8 @@ export async function processGenome (id) {
       'water': mapper.lookup('water'),
       'atmoDensity': mapper.lookup('atmoDensity'),
       'cloudDensity': mapper.lookup('cloudDensity'),
-      'baseColor': mapper.lookup('baseColor').toString(16),
-      'accColor': mapper.lookup('accColor').toString(16),
+      'baseColor': mapper.lookup('baseColor').toString(16).padStart(6, '0'),
+      'accColor': mapper.lookup('accColor').toString(16).padStart(6, '0'),
       'numTerrains': mapper.lookup('numTerrains'),
       'ring': mapper.lookup('ring')
     },
