@@ -3,8 +3,8 @@ pragma solidity ^0.4.18;
 import "./SpaceBase.sol";
 
 
-/// @title Interface for contracts conforming to ERC-721: Non-Fungible Tokens
-/// @author Earthereum <austinatchley@gmail.com> (https://github.com/Earthereum)
+// @title Interface for contracts conforming to ERC-721: Non-Fungible Tokens
+// @author Earthereum <austinatchley@gmail.com> (https://github.com/Earthereum)
 contract ERC721 {
     // Required methods
     function totalSupply() public view returns (uint256 total);
@@ -22,48 +22,48 @@ contract ERC721 {
 
 contract SpaceOwnership is SpaceBase, ERC721 {
 
-	/// Name and symbol of the non fungible token, as defined in ERC721.
+	// Name and symbol of the non fungible token, as defined in ERC721.
     string public name = "Earthereum";
     string public symbol = "ERTH";
 
     bool public implementsERC721 = true;
 
-    /// Checks if a given address is the current owner of a particular planet.
-    /// _claimant the address we are validating against.
-    /// _tokenId planet id, only valid when > 0
+    // Checks if a given address is the current owner of a particular planet.
+    // _claimant the address we are validating against.
+    // _tokenId planet id, only valid when > 0
     function _owns(address _claimant, uint256 _tokenId) internal view returns (bool) {
         return planetIndexToOwner[_tokenId] == _claimant;
     }
 
-    /// Checks if a given address currently has transferApproval for a particular planet.
-    /// _claimant the address we are confirming planet is approved for.
-    /// _tokenId planet id, only valid when > 0
+    // Checks if a given address currently has transferApproval for a particular planet.
+    // _claimant the address we are confirming planet is approved for.
+    // _tokenId planet id, only valid when > 0
     function _approvedFor(address _claimant, uint256 _tokenId) internal view returns (bool) {
         return planetIndexToApproved[_tokenId] == _claimant;
     }
 
-    /// Marks an address as being approved for transferFrom(), overwriting any previous
-    ///  approval. Setting _approved to address(0) clears all transfer approval.
-    ///  NOTE: _approve() does NOT send the Approval event. This is intentional because
-    ///  _approve() and transferFrom() are used together for putting planets on auction, and
-    ///  there is no value in spamming the log with Approval events in that case.
+    // Marks an address as being approved for transferFrom(), overwriting any previous
+    //  approval. Setting _approved to address(0) clears all transfer approval.
+    //  NOTE: _approve() does NOT send the Approval event. This is intentional because
+    //  _approve() and transferFrom() are used together for putting planets on auction, and
+    //  there is no value in spamming the log with Approval events in that case.
     function _approve(uint256 _tokenId, address _approved) internal {
         planetIndexToApproved[_tokenId] = _approved;
     }
 
-    /// Returns the number of planets owned by a specific address.
-    /// _owner The owner address to check.
-    /// Required for ERC-721 compliance
+    // Returns the number of planets owned by a specific address.
+    // _owner The owner address to check.
+    // Required for ERC-721 compliance
     function balanceOf(address _owner) public view returns (uint256 count) {
         return ownershipTokenCount[_owner];
     }
 
-    /// Transfers a planet to another address. If transferring to a smart
-    ///  contract be VERY CAREFUL to ensure that it is aware of ERC-721 (or
-    ///  Cryptoplanets specifically) or your planet may be lost forever. Seriously.
-    /// _to The address of the recipient, can be a user or contract.
-    /// _tokenId The ID of the planet to transfer.
-    /// Required for ERC-721 compliance.
+    // Transfers a planet to another address. If transferring to a smart
+    //  contract be VERY CAREFUL to ensure that it is aware of ERC-721 (or
+    //  Cryptoplanets specifically) or your planet may be lost forever. Seriously.
+    // _to The address of the recipient, can be a user or contract.
+    // _tokenId The ID of the planet to transfer.
+    // Required for ERC-721 compliance.
     function transfer(
         address _to,
         uint256 _tokenId
@@ -90,12 +90,12 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         _transfer(msg.sender, _to, _tokenId);
     }
 
-    /// Grant another address the right to transfer a specific planet via
-    ///  transferFrom(). This is the preferred flow for transfering NFTs to contracts.
-    /// _to The address to be granted transfer approval. Pass address(0) to
-    ///  clear all approvals.
-    /// _tokenId The ID of the planet that can be transferred if this call succeeds.
-    /// Required for ERC-721 compliance.
+    // Grant another address the right to transfer a specific planet via
+    //  transferFrom(). This is the preferred flow for transfering NFTs to contracts.
+    // _to The address to be granted transfer approval. Pass address(0) to
+    //  clear all approvals.
+    // _tokenId The ID of the planet that can be transferred if this call succeeds.
+    // Required for ERC-721 compliance.
     function approve(
         address _to,
         uint256 _tokenId
@@ -113,13 +113,13 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         Approval(msg.sender, _to, _tokenId);
     }
 
-    /// Transfer a planet owned by another address, for which the calling address
-    ///  has previously been granted transfer approval by the owner.
-    /// _from The address that owns the planet to be transfered.
-    /// _to The address that should take ownership of the planet. Can be any address,
-    ///  including the caller.
-    /// _tokenId The ID of the planet to be transferred.
-    /// Required for ERC-721 compliance.
+    // Transfer a planet owned by another address, for which the calling address
+    //  has previously been granted transfer approval by the owner.
+    // _from The address that owns the planet to be transfered.
+    // _to The address that should take ownership of the planet. Can be any address,
+    //  including the caller.
+    // _tokenId The ID of the planet to be transferred.
+    // Required for ERC-721 compliance.
     function transferFrom(
         address _from,
         address _to,
@@ -142,14 +142,14 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         _transfer(_from, _to, _tokenId);
     }
 
-    /// Returns the total number of planets currently in existence.
-    /// Required for ERC-721 compliance.
+    // Returns the total number of planets currently in existence.
+    // Required for ERC-721 compliance.
     function totalSupply() public view returns (uint) {
         return planets.length - 1;
     }
 
-    /// Returns the address currently assigned ownership of a given planet.
-    /// Required for ERC-721 compliance.
+    // Returns the address currently assigned ownership of a given planet.
+    // Required for ERC-721 compliance.
     function ownerOf(uint256 _tokenId)
         external
         view
@@ -160,12 +160,12 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         require(owner != address(0));
     }
 
-    /// Returns a list of all planet IDs assigned to an address.
-    /// _owner The owner whose planets we are interested in.
-    /// This method MUST NEVER be called by smart contract code. First, it's fairly
-    ///  expensive (it walks the entire planet array looking for Planets belonging to owner),
-    ///  but it also returns a dynamic array, which is only supported for web3 calls, and
-    ///  not contract-to-contract calls.
+    // Returns a list of all planet IDs assigned to an address.
+    // _owner The owner whose planets we are interested in.
+    // This method MUST NEVER be called by smart contract code. First, it's fairly
+    //  expensive (it walks the entire planet array looking for Planets belonging to owner),
+    //  but it also returns a dynamic array, which is only supported for web3 calls, and
+    //  not contract-to-contract calls.
     function tokensOfOwner(address _owner) external view returns(uint256[] ownerTokens) {
         uint256 tokenCount = balanceOf(_owner);
 
@@ -192,9 +192,9 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         }
     }
 
-    /// Adapted from memcpy() by @arachnid (Nick Johnson <arachnid@notdot.net>)
-    ///  This method is licenced under the Apache License.
-    ///  Ref: https://github.com/Arachnid/solidity-stringutils/blob/2f6ca9accb48ae14c66f1437ec50ed19a0616f78/strings.sol
+    // Adapted from memcpy() by arachnid (Nick Johnson <arachnid@notdot.net>)
+    //  This method is licenced under the Apache License.
+    //  Ref: https://github.com/Arachnid/solidity-stringutils/blob/2f6ca9accb48ae14c66f1437ec50ed19a0616f78/strings.sol
     function _memcpy(uint _dest, uint _src, uint _len) private pure {
         // Copy word-length chunks while possible
         for(; _len >= 32; _len -= 32) {
@@ -214,9 +214,9 @@ contract SpaceOwnership is SpaceBase, ERC721 {
         }
     }
 
-    /// Adapted from toString(slice) by @arachnid (Nick Johnson <arachnid@notdot.net>)
-    ///  This method is licenced under the Apache License.
-    ///  Ref: https://github.com/Arachnid/solidity-stringutils/blob/2f6ca9accb48ae14c66f1437ec50ed19a0616f78/strings.sol
+    // Adapted from toString(slice) by arachnid (Nick Johnson <arachnid@notdot.net>)
+    //  This method is licenced under the Apache License.
+    //  Ref: https://github.com/Arachnid/solidity-stringutils/blob/2f6ca9accb48ae14c66f1437ec50ed19a0616f78/strings.sol
     function _toString(bytes32[4] _rawBytes, uint256 _stringLength) private pure returns (string) {
         var outputString = new string(_stringLength);
         uint256 outputPtr;
