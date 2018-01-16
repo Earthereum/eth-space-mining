@@ -6,17 +6,17 @@ import "./SpaceAuction.sol";
 contract SpaceBase is SpaceAccessControl {
 	 /*** EVENTS ***/
 
-    /// @dev The Creation event is fired whenever a new planet comes into existence. Called when
+    /// The Creation event is fired whenever a new planet comes into existence. Called when
     /// planets are generated from player or gen
     event Birth(address owner, uint256 planetId, uint256 genes);
 
-    /// @dev Transfer event as defined in current draft of ERC721. Emitted every time a planet
+    /// Transfer event as defined in current draft of ERC721. Emitted every time a planet
     ///  ownership is assigned, including births.
     event Transfer(address from, address to, uint256 tokenId);
 
     /*** DATA TYPES ***/
 
-    /// @dev The main Planet struct. 
+    /// The main Planet struct. 
     ///  Ref: http://solidity.readthedocs.io/en/develop/miscellaneous.html
     struct Planet {
         // The Planet's genetic code is packed into these 256-bits
@@ -44,7 +44,7 @@ contract SpaceBase is SpaceAccessControl {
 
     /*** CONSTANTS ***/
 
-    /// @dev A lookup table indicating the cooldown duration after any successful
+    /// A lookup table indicating the cooldown duration after any successful
     ///  harvesting action.
     ///  Designed such that the cooldown roughly doubles each time a planet
     ///  is harvested, encouraging owners not to just keep harvesting the same planet over
@@ -72,29 +72,29 @@ contract SpaceBase is SpaceAccessControl {
 
     /*** STORAGE ***/
 
-    /// @dev An array containing the Planet struct for all Planets in existence. The ID
+    /// An array containing the Planet struct for all Planets in existence. The ID
     ///  of each planet is actually an index into this array. Note that ID 0 is TBD
     Planet[] planets;
 
-    /// @dev A mapping from planet IDs to the address that owns them. All planets have
+    /// A mapping from planet IDs to the address that owns them. All planets have
     ///  some valid owner address, even gen0 planets are created with a non-zero owner.
     mapping (uint256 => address) public planetIndexToOwner;
 
-    // @dev A mapping from owner address to count of tokens that address owns.
+    // A mapping from owner address to count of tokens that address owns.
     //  Used internally inside balanceOf() to resolve ownership count.
     mapping (address => uint256) ownershipTokenCount;
 
-    /// @dev A mapping from PlanetIDs to an address that has been approved to call
+    /// A mapping from PlanetIDs to an address that has been approved to call
     ///  transferFrom(). Each Planet can only have one approved address for transfer
     ///  at any time. A zero value means no approval is outstanding.
     mapping (uint256 => address) public planetIndexToApproved;
 
-    /// @dev The address of the ClockAuction contract that handles sales of Planets. This
+    /// The address of the ClockAuction contract that handles sales of Planets. This
     ///  same contract handles both peer-to-peer sales as well as the gen0 sales which are
     ///  initiated every 15 minutes.
     SaleClockAuction public saleAuction;
 
-    /// @dev Assigns ownership of a specific Planet to an address.
+    /// Assigns ownership of a specific Planet to an address.
     function _transfer(address _from, address _to, uint256 _tokenId) internal {
         // Since the number of planets is capped to 2^32 we can't overflow this
         ownershipTokenCount[_to]++;
@@ -110,13 +110,13 @@ contract SpaceBase is SpaceAccessControl {
         Transfer(_from, _to, _tokenId);
     }
 
-    /// @dev An internal method that creates a new Planet and stores it. This
+    /// An internal method that creates a new Planet and stores it. This
     ///  method doesn't do any checking and should only be called when the
     ///  input data is known to be valid. Will generate both a Birth event
     ///  and a Transfer event.
-    /// @param _generation The generation number of this planet, must be computed by caller.
-    /// @param _genes The Planet's genetic code.
-    /// @param _owner The inital owner of this planet, must be non-zero (except for the unPlanet, ID 0)
+    /// _generation The generation number of this planet, must be computed by caller.
+    /// _genes The Planet's genetic code.
+    /// _owner The inital owner of this planet, must be non-zero (except for the unPlanet, ID 0)
     function _createPlanet(
         uint256 _generation,
         uint256 _genes,
