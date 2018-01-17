@@ -49,7 +49,7 @@ contract SpaceCore is SpaceCreation {
     // Set in case the core contract is broken and an upgrade is required
     address public newContractAddress;
 
-    /// Creates the main Earthereum smart contract instance.
+    // Creates the main Earthereum smart contract instance.
     function SpaceCore() public {
         // Starts paused.
         paused = true;
@@ -64,28 +64,28 @@ contract SpaceCore is SpaceCreation {
         _createPlanet(0, uint256(-1), address(0));
     }
 
-    /// Used to mark the smart contract as upgraded, in case there is a serious
-    ///  breaking bug. This method does nothing but keep track of the new contract and
-    ///  emit a message indicating that the new address is set. It's up to clients of this
-    ///  contract to update to the new contract address in that case. (This contract will
-    ///  be paused indefinitely if such an upgrade takes place.)
-    /// _v2Address new address
+    // Used to mark the smart contract as upgraded, in case there is a serious
+    //  breaking bug. This method does nothing but keep track of the new contract and
+    //  emit a message indicating that the new address is set. It's up to clients of this
+    //  contract to update to the new contract address in that case. (This contract will
+    //  be paused indefinitely if such an upgrade takes place.)
+    // _v2Address new address
     function setNewAddress(address _v2Address) external onlyCEO whenPaused {
         newContractAddress = _v2Address;
         ContractUpgrade(_v2Address);
     }
 
-    /// No tipping!
-    /// Reject all Ether from being sent here, unless it's from one of the
-    ///  two auction contracts. (Hopefully, we can prevent user accidents.)
+    // No tipping!
+    // Reject all Ether from being sent here, unless it's from one of the
+    //  two auction contracts. (Hopefully, we can prevent user accidents.)
     function() external payable {
         require(
             msg.sender == address(saleAuction)
         );
     }
 
-    /// Returns all the relevant information about a specific planet.
-    /// _id The ID of the planet of interest.
+    // Returns all the relevant information about a specific planet.
+    // _id The ID of the planet of interest.
     function getPlanet(uint256 _id)
         external
         view
@@ -107,11 +107,11 @@ contract SpaceCore is SpaceCreation {
         genes = planet.genes;
     }
 
-    /// Override unpause so it requires all external contract addresses
-    ///  to be set before contract can be unpaused. Also, we can't have
-    ///  newContractAddress set either, because then the contract was upgraded.
-    /// This is public rather than external so we can call super.unpause
-    ///  without using an expensive CALL.
+    // Override unpause so it requires all external contract addresses
+    //  to be set before contract can be unpaused. Also, we can't have
+    //  newContractAddress set either, because then the contract was upgraded.
+    // This is public rather than external so we can call super.unpause
+    //  without using an expensive CALL.
     function unpause() public onlyCEO whenPaused {
         require(saleAuction != address(0));
         // Our current system does not combine traits of planets, but may in the future

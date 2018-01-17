@@ -1,16 +1,31 @@
-var SpaceBase = artifacts.require("./SpaceBase.sol");
-var SpaceAccessControl = artifacts.require("./SpaceAccessControl.sol");
-var SpaceOwnership = artifacts.require("./SpaceOwnership.sol");
-var SpaceCreation = artifacts.require("./SpaceCreation.sol");
-var SpaceAuction = artifacts.require("./SpaceAuction.sol");
-var SpaceCore = artifacts.require("./SpaceCore.sol");
+var contracts = [
+  artifacts.require("SpaceBase"),
+  artifacts.require("SpaceAccessControl"),
+  artifacts.require("SpaceCreation"),
+  artifacts.require("Pausable"),
+  artifacts.require("Ownable"),
+  artifacts.require("SpaceAuction"),
+  artifacts.require("ClockAuctionBase"),
+  artifacts.require("ClockAuction"),
+  artifacts.require("SpaceOwnership")
+];
+
+var SpaceCore = artifacts.require("SpaceCore");
+var SaleClockAuction = artifacts.require("SaleClockAuction");
 
 module.exports = function(deployer) {
-  deployer.deploy(SpaceBase);
-  deployer.deploy(SpaceAccessControl);
-  deployer.deploy(SpaceOwnership);
-  deployer.deploy(SpaceCreation);
-  deployer.deploy(SpaceAuction);
-  deployer.deploy(SpaceCore);
-};
+  deployer.deploy(contracts);
 
+  deployer.deploy(SpaceCore);
+  deployer.deploy(SaleClockAuction);
+
+  var coreInstance;
+  deployer.then(() => SpaceCore.deployed())
+  .then(instance => coreInstance = instance)
+  .then(() => {
+    coreInstance.setSaleAuctionAddress(SaleClockAuction.address);
+    console.log('Expected SaleClockAuction Address: ' + SaleClockAuction.address);
+    coreInstance.saleAuction.call().then(val => console.log('Actual: ' + val));
+  })
+  .catch(err => console.error(err));
+};

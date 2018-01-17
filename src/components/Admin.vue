@@ -16,6 +16,9 @@
                         <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
                     </v-snackbar>
                 </div>
+                <v-btn round color="primary" dark class="white--text" @click="createAuction">
+                        Create Auction
+                </v-btn>
             </div>
         </v-flex>
     </v-layout>
@@ -34,6 +37,14 @@
       };
     },
     methods: {
+      createAuction: async function (event) {
+        event.preventDefault();
+
+        const coreInstance = await window.contracts.Core.deployed();
+
+        const auctionResult = await coreInstance.createSaleAuction(1, 1, 1000, {from: window.web3.eth.accounts[0]});
+        console.log(auctionResult);
+      },
       createPromo: async function (event) {
         event.preventDefault();
 

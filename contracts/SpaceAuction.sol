@@ -2,82 +2,8 @@ pragma solidity ^0.4.18;
 
 import "./SpaceOwnership.sol";
 import "./SpaceOwnership.sol";
-
-contract Ownable {
-  address public owner;
-
-
-  /**
-   * The Ownable constructor sets the original `owner` of the contract to the sender
-   * account.
-   */
-  function Ownable() public {
-    owner = msg.sender;
-  }
-
-
-  /**
-   * Throws if called by any account other than the owner.
-   */
-  modifier onlyOwner() {
-    require(msg.sender == owner);
-    _;
-  }
-
-
-  /**
-   * Allows the current owner to transfer control of the contract to a newOwner.
-   * newOwner The address to transfer ownership to.
-   */
-  function transferOwnership(address newOwner) onlyOwner public {
-    if (newOwner != address(0)) {
-      owner = newOwner;
-    }
-  }
-
-}
-
-contract Pausable is Ownable {
-  event Pause();
-  event Unpause();
-
-  bool public paused = false;
-
-
-  /**
-   * modifier to allow actions only when the contract IS paused
-   */
-  modifier whenNotPaused() {
-    require(!paused);
-    _;
-  }
-
-  /**
-   * modifier to allow actions only when the contract IS NOT paused
-   */
-  modifier whenPaused {
-    require(paused);
-    _;
-  }
-
-  /**
-   * called by the owner to pause, triggers stopped state
-   */
-  function pause() onlyOwner whenNotPaused public returns (bool) {
-    paused = true;
-    Pause();
-    return true;
-  }
-
-  /**
-   * called by the owner to unpause, returns to normal state
-   */
-  function unpause() onlyOwner whenPaused public returns (bool) {
-    paused = false;
-    Unpause();
-    return true;
-  }
-}
+import "./Ownable.sol";
+import "./Pausable.sol";
 
 contract ClockAuctionBase {
 
@@ -85,10 +11,8 @@ contract ClockAuctionBase {
     struct Auction {
         // Current owner of NFT
         address seller;
-        // Price (in wei) at beginning of auction
-        uint128 startingPrice;
-        // Price (in wei) at end of auction
-        uint128 endingPrice;
+        // Price in wei
+        uint128 price;
         // Duration (in seconds) of auction
         uint64 duration;
         // Time when auction started
@@ -106,39 +30,39 @@ contract ClockAuctionBase {
     // Map from token ID to their corresponding auction.
     mapping (uint256 => Auction) tokenIdToAuction;
 
-    event AuctionCreated(uint256 tokenId, uint256 startingPrice, uint256 endingPrice, uint256 duration);
+    event AuctionCreated(uint256 tokenId, uint256 price, uint256 duration);
     event AuctionSuccessful(uint256 tokenId, uint256 totalPrice, address winner);
     event AuctionCancelled(uint256 tokenId);
 
-    /// Returns true if the claimant owns the token.
-    /// _claimant - Address claiming to own the token.
-    /// _tokenId - ID of token whose ownership to verify.
+    // Returns true if the claimant owns the token.
+    // _claimant - Address claiming to own the token.
+    // _tokenId - ID of token whose ownership to verify.
     function _owns(address _claimant, uint256 _tokenId) internal view returns (bool) {
         return (nonFungibleContract.ownerOf(_tokenId) == _claimant);
     }
 
-    /// Escrows the NFT, assigning ownership to this contract.
-    /// Throws if the escrow fails.
-    /// _owner - Current owner address of token to escrow.
-    /// _tokenId - ID of token whose approval to verify.
+    // Escrows the NFT, assigning ownership to this contract.
+    // Throws if the escrow fails.
+    // _owner - Current owner address of token to escrow.
+    // _tokenId - ID of token whose approval to verify.
     function _escrow(address _owner, uint256 _tokenId) internal {
         // it will throw if transfer fails
         nonFungibleContract.transferFrom(_owner, this, _tokenId);
     }
 
-    /// Transfers an NFT owned by this contract to another address.
-    /// Returns true if the transfer succeeds.
-    /// _receiver - Address to transfer NFT to.
-    /// _tokenId - ID of token to transfer.
+    // Transfers an NFT owned by this contract to another address.
+    // Returns true if the transfer succeeds.
+    // _receiver - Address to transfer NFT to.
+    // _tokenId - ID of token to transfer.
     function _transfer(address _receiver, uint256 _tokenId) internal {
         // it will throw if transfer fails
         nonFungibleContract.transfer(_receiver, _tokenId);
     }
 
-    /// Adds an auction to the list of open auctions. Also fires the
-    ///  AuctionCreated event.
-    /// _tokenId The ID of the token to be put on auction.
-    /// _auction Auction to add.
+    // Adds an auction to the list of open auctions. Also fires the
+    //  AuctionCreated event.
+    // _tokenId The ID of the token to be put on auction.
+    // _auction Auction to add.
     function _addAuction(uint256 _tokenId, Auction _auction) internal {
         // Require that all auctions have a duration of
         // at least one minute. (Keeps our math from getting hairy!)
@@ -148,21 +72,20 @@ contract ClockAuctionBase {
 
         AuctionCreated(
             uint256(_tokenId),
-            uint256(_auction.startingPrice),
-            uint256(_auction.endingPrice),
+            uint256(_auction.price),
             uint256(_auction.duration)
         );
     }
 
-    /// Cancels an auction unconditionally.
+    // Cancels an auction unconditionally.
     function _cancelAuction(uint256 _tokenId, address _seller) internal {
         _removeAuction(_tokenId);
         _transfer(_seller, _tokenId);
         AuctionCancelled(_tokenId);
     }
 
-    /// Computes the price and transfers winnings.
-    /// Does NOT transfer ownership of token.
+    // Computes the price and transfers winnings.
+    // Does NOT transfer ownership of token.
     function _bid(uint256 _tokenId, uint256 _bidAmount)
         internal
         returns (uint256)
@@ -176,8 +99,7 @@ contract ClockAuctionBase {
         // return an auction object that is all zeros.)
         require(_isOnAuction(auction));
 
-        // Check that the bid is greater than or equal to the current price
-        uint256 price = _currentPrice(auction);
+        uint256 price = auction.price;
         require(_bidAmount >= price);
 
         // Grab a reference to the seller before the auction struct
@@ -223,87 +145,20 @@ contract ClockAuctionBase {
         return price;
     }
 
-    /// Removes an auction from the list of open auctions.
-    /// _tokenId - ID of NFT on auction.
+    // Removes an auction from the list of open auctions.
+    // _tokenId - ID of NFT on auction.
     function _removeAuction(uint256 _tokenId) internal {
         delete tokenIdToAuction[_tokenId];
     }
 
-    /// Returns true if the NFT is on auction.
-    /// _auction - Auction to check.
+    // Returns true if the NFT is on auction.
+    // _auction - Auction to check.
     function _isOnAuction(Auction storage _auction) internal view returns (bool) {
         return (_auction.startedAt > 0);
     }
 
-    /// Returns current price of an NFT on auction. Broken into two
-    ///  functions (this one, that computes the duration from the auction
-    ///  structure, and the other that does the price computation) so we
-    ///  can easily test that the price computation works correctly.
-    function _currentPrice(Auction storage _auction)
-        internal
-        view
-        returns (uint256)
-    {
-        uint256 secondsPassed = 0;
-
-        // A bit of insurance against negative values (or wraparound).
-        // Probably not necessary (since Ethereum guarnatees that the
-        // now variable doesn't ever go backwards).
-        if (now > _auction.startedAt) {
-            secondsPassed = now - _auction.startedAt;
-        }
-
-        return _computeCurrentPrice(
-            _auction.startingPrice,
-            _auction.endingPrice,
-            _auction.duration,
-            secondsPassed
-        );
-    }
-
-    /// Computes the current price of an auction. Factored out
-    ///  from _currentPrice so we can run extensive unit tests.
-    ///  When testing, make this function public and turn on
-    ///  `Current price computation` test suite.
-    function _computeCurrentPrice(
-        uint256 _startingPrice,
-        uint256 _endingPrice,
-        uint256 _duration,
-        uint256 _secondsPassed
-    )
-        internal
-        pure
-        returns (uint256)
-    {
-        // NOTE: We don't use SafeMath (or similar) in this function because
-        //  all of our public functions carefully cap the maximum values for
-        //  time (at 64-bits) and currency (at 128-bits). _duration is
-        //  also known to be non-zero (see the require() statement in
-        //  _addAuction())
-        if (_secondsPassed >= _duration) {
-            // We've reached the end of the dynamic pricing portion
-            // of the auction, just return the end price.
-            return _endingPrice;
-        } else {
-            // Starting price can be higher than ending price (and often is!), so
-            // this delta can be negative.
-            int256 totalPriceChange = int256(_endingPrice) - int256(_startingPrice);
-
-            // This multiplication can't overflow, _secondsPassed will easily fit within
-            // 64-bits, and totalPriceChange will easily fit within 128-bits, their product
-            // will always fit within 256-bits.
-            int256 currentPriceChange = totalPriceChange * int256(_secondsPassed) / int256(_duration);
-
-            // currentPriceChange can be negative, but if so, will have a magnitude
-            // less that _startingPrice. Thus, this result will always end up positive.
-            int256 currentPrice = int256(_startingPrice) + currentPriceChange;
-
-            return uint256(currentPrice);
-        }
-    }
-
-    /// Computes owner's cut of a sale.
-    /// _price - Sale price of NFT.
+    // Computes owner's cut of a sale.
+    // _price - Sale price of NFT.
     function _computeCut(uint256 _price) internal view returns (uint256) {
         // NOTE: We don't use SafeMath (or similar) in this function because
         //  all of our entry functions carefully cap the maximum values for
@@ -317,12 +172,12 @@ contract ClockAuctionBase {
 
 contract ClockAuction is ClockAuctionBase, Pausable	 {
 
-    /// Constructor creates a reference to the NFT ownership contract
-    ///  and verifies the owner cut is in the valid range.
-    /// _nftAddress - address of a deployed contract implementing
-    ///  the Nonfungible Interface.
-    /// _cut - percent cut the owner takes on each auction, must be
-    ///  between 0-10,000.
+    // Constructor creates a reference to the NFT ownership contract
+    //  and verifies the owner cut is in the valid range.
+    // _nftAddress - address of a deployed contract implementing
+    //  the Nonfungible Interface.
+    // _cut - percent cut the owner takes on each auction, must be
+    //  between 0-10,000.
     function ClockAuction(address _nftAddress, uint256 _cut) public {
         require(_cut <= 10000);
         ownerCut = _cut;
@@ -331,10 +186,10 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         nonFungibleContract = candidateContract;
     }
 
-    /// Remove all Ether from the contract, which is the owner's cuts
-    ///  as well as any Ether sent directly to the contract address.
-    ///  Always transfers to the NFT contract, but can be called either by
-    ///  the owner or the NFT contract.
+    // Remove all Ether from the contract, which is the owner's cuts
+    //  as well as any Ether sent directly to the contract address.
+    //  Always transfers to the NFT contract, but can be called either by
+    //  the owner or the NFT contract.
     function withdrawBalance() external {
         address nftAddress = address(nonFungibleContract);
 
@@ -346,17 +201,16 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         nftAddress.transfer(this.balance);
     }
 
-    /// Creates and begins a new auction.
-    /// _tokenId - ID of token to auction, sender must be owner.
-    /// _startingPrice - Price of item (in wei) at beginning of auction.
-    /// _endingPrice - Price of item (in wei) at end of auction.
-    /// _duration - Length of time to move between starting
-    ///  price and ending price (in seconds).
-    /// _seller - Seller, if not the message sender
+    // Creates and begins a new auction.
+    // _tokenId - ID of token to auction, sender must be owner.
+    // _startingPrice - Price of item (in wei) at beginning of auction.
+    // _endingPrice - Price of item (in wei) at end of auction.
+    // _duration - Length of time to move between starting
+    //  price and ending price (in seconds).
+    // _seller - Seller, if not the message sender
     function createAuction(
         uint256 _tokenId,
-        uint256 _startingPrice,
-        uint256 _endingPrice,
+        uint256 _price,
         uint256 _duration,
         address _seller
     )
@@ -365,25 +219,23 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
     {
         // Sanity check that no inputs overflow how many bits we've allocated
         // to store them in the auction struct.
-        require(_startingPrice == uint256(uint128(_startingPrice)));
-        require(_endingPrice == uint256(uint128(_endingPrice)));
+        require(_price == uint256(uint64(_price)));
         require(_duration == uint256(uint64(_duration)));
 
         require(_owns(msg.sender, _tokenId));
         _escrow(msg.sender, _tokenId);
         Auction memory auction = Auction(
             _seller,
-            uint128(_startingPrice),
-            uint128(_endingPrice),
+            uint128(_price),
             uint64(_duration),
             uint64(now)
         );
         _addAuction(_tokenId, auction);
     }
 
-    /// Bids on an open auction, completing the auction and transferring
-    ///  ownership of the NFT if enough Ether is supplied.
-    /// _tokenId - ID of token to bid on.
+    // Bids on an open auction, completing the auction and transferring
+    //  ownership of the NFT if enough Ether is supplied.
+    // _tokenId - ID of token to bid on.
     function bid(uint256 _tokenId)
         external
         payable
@@ -394,11 +246,11 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         _transfer(msg.sender, _tokenId);
     }
 
-    /// Cancels an auction that hasn't been won yet.
-    ///  Returns the NFT to original owner.
-    /// This is a state-modifying function that can
-    ///  be called while the contract is paused.
-    /// _tokenId - ID of token on auction
+    // Cancels an auction that hasn't been won yet.
+    //  Returns the NFT to original owner.
+    // This is a state-modifying function that can
+    //  be called while the contract is paused.
+    // _tokenId - ID of token on auction
     function cancelAuction(uint256 _tokenId)
         external
     {
@@ -409,10 +261,10 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         _cancelAuction(_tokenId, seller);
     }
 
-    /// Cancels an auction when the contract is paused.
-    ///  Only the owner may do this, and NFTs are returned to
-    ///  the seller. This should only be used in emergencies.
-    /// _tokenId - ID of the NFT on auction to cancel.
+    // Cancels an auction when the contract is paused.
+    //  Only the owner may do this, and NFTs are returned to
+    //  the seller. This should only be used in emergencies.
+    // _tokenId - ID of the NFT on auction to cancel.
     function cancelAuctionWhenPaused(uint256 _tokenId)
         whenPaused
         onlyOwner
@@ -423,16 +275,15 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         _cancelAuction(_tokenId, auction.seller);
     }
 
-    /// Returns auction info for an NFT on auction.
-    /// _tokenId - ID of NFT on auction.
+    // Returns auction info for an NFT on auction.
+    // _tokenId - ID of NFT on auction.
     function getAuction(uint256 _tokenId)
         external
         view
         returns
     (
         address seller,
-        uint256 startingPrice,
-        uint256 endingPrice,
+        uint256 price,
         uint256 duration,
         uint256 startedAt
     ) {
@@ -440,15 +291,14 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
         require(_isOnAuction(auction));
         return (
             auction.seller,
-            auction.startingPrice,
-            auction.endingPrice,
+            auction.price,
             auction.duration,
             auction.startedAt
         );
     }
 
-    /// Returns the current price of an auction.
-    /// _tokenId - ID of the token price we are checking.
+    // Returns the current price of an auction.
+    // _tokenId - ID of the token price we are checking.
     function getCurrentPrice(uint256 _tokenId)
         external
         view
@@ -456,7 +306,7 @@ contract ClockAuction is ClockAuctionBase, Pausable	 {
     {
         Auction storage auction = tokenIdToAuction[_tokenId];
         require(_isOnAuction(auction));
-        return _currentPrice(auction);
+        return auction.price;
     }
 }
 
@@ -474,16 +324,15 @@ contract SaleClockAuction is ClockAuction {
     function SaleClockAuction(address _nftAddr, uint256 _cut) public
         ClockAuction(_nftAddr, _cut) {}
 
-    /// Creates and begins a new auction.
-    /// _tokenId - ID of token to auction, sender must be owner.
-    /// _startingPrice - Price of item (in wei) at beginning of auction.
-    /// _endingPrice - Price of item (in wei) at end of auction.
-    /// _duration - Length of auction (in seconds).
-    /// _seller - Seller, if not the message sender
+    // Creates and begins a new auction.
+    // _tokenId - ID of token to auction, sender must be owner.
+    // _startingPrice - Price of item (in wei) at beginning of auction.
+    // _endingPrice - Price of item (in wei) at end of auction.
+    // _duration - Length of auction (in seconds).
+    // _seller - Seller, if not the message sender
     function createAuction(
         uint256 _tokenId,
-        uint256 _startingPrice,
-        uint256 _endingPrice,
+        uint256 _price,
         uint256 _duration,
         address _seller
     )
@@ -491,24 +340,22 @@ contract SaleClockAuction is ClockAuction {
     {
         // Sanity check that no inputs overflow how many bits we've allocated
         // to store them in the auction struct.
-        require(_startingPrice == uint256(uint128(_startingPrice)));
-        require(_endingPrice == uint256(uint128(_endingPrice)));
+        require(_price == uint256(uint128(_price)));
         require(_duration == uint256(uint64(_duration)));
 
         require(msg.sender == address(nonFungibleContract));
         _escrow(_seller, _tokenId);
         Auction memory auction = Auction(
             _seller,
-            uint128(_startingPrice),
-            uint128(_endingPrice),
+            uint128(_price),
             uint64(_duration),
             uint64(now)
         );
         _addAuction(_tokenId, auction);
     }
 
-    /// Updates lastSalePrice if seller is the nft contract
-    /// Otherwise, works the same as default bid method.
+    // Updates lastSalePrice if seller is the nft contract
+    // Otherwise, works the same as default bid method.
     function bid(uint256 _tokenId)
         external
         payable
@@ -538,13 +385,8 @@ contract SaleClockAuction is ClockAuction {
 
 contract SpaceAuction is SpaceOwnership {
 
-    // The auction contract variables are defined in PlanetBase to allow
-    //  us to refer to them in PlanetOwnership to prevent accidental transfers.
-    // `saleAuction` refers to the auction for gen0 and p2p sale of planets.
-    // `siringAuction` refers to the auction for siring rights of planets.
-
-    /// Sets the reference to the sale auction.
-    /// _address - Address of sale contract.
+    // Sets the reference to the sale auction.
+    // _address - Address of sale contract.
     function setSaleAuctionAddress(address _address) external onlyCEO {
         SaleClockAuction candidateContract = SaleClockAuction(_address);
 
@@ -555,12 +397,11 @@ contract SpaceAuction is SpaceOwnership {
         saleAuction = candidateContract;
     }
 
-    /// Put a planet up for auction.
-    ///  Does some ownership trickery to create auctions in one tx.
+    // Put a planet up for auction.
+    //  Does some ownership trickery to create auctions in one tx.
     function createSaleAuction(
         uint256 _planetId,
-        uint256 _startingPrice,
-        uint256 _endingPrice,
+        uint256 _price,
         uint256 _duration
     )
         external
@@ -578,16 +419,15 @@ contract SpaceAuction is SpaceOwnership {
         // transfer and sire approval after escrowing the planet.
         saleAuction.createAuction(
             _planetId,
-            _startingPrice,
-            _endingPrice,
+            _price,
             _duration,
             msg.sender
         );
     }
 
-    /// Transfers the balance of the sale auction contract
-    /// to the PlanetCore contract. We use two-step withdrawal to
-    /// prevent two transfer calls in the auction bid function.
+    // Transfers the balance of the sale auction contract
+    // to the PlanetCore contract. We use two-step withdrawal to
+    // prevent two transfer calls in the auction bid function.
     function withdrawAuctionBalances() external onlyCLevel {
         saleAuction.withdrawBalance();
     }
