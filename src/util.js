@@ -9,7 +9,7 @@ export async function processGenome (id) {
   const mapper = new GenomeMapper(genome, DEMO_MAPPING);
 
   return {
-    title: 'Planet ' + id,
+    title: `${computeTitle(genome)} ${id}`,
     traits: {
       'seed': mapper.sliceNumber(0, 32),
       'size': mapper.lookup('size'),
@@ -37,4 +37,39 @@ async function getPlanet (id) {
 
 function computePrice () {
   return Math.ceil(Math.random() * 10000) / 10000;
+}
+
+function computeTitle (genome) {
+  const consonants = 'bcdfghjklmnpqrstvwxz'.split('');
+  const vowels = 'aeiouy'.split('');
+
+  const mapping = {
+    'n': {
+      'type': 'fixed',
+      'bits': 2,
+      'range': [2, 6]
+    }
+  };
+  for (let i = 0; i < 6; i++) {
+    mapping['c' + i] = {
+      'type': 'fixed',
+      'bits': 6
+    };
+    mapping['v' + i] = {
+      'type': 'fixed',
+      'bits': 3
+    };
+  }
+
+  const mapper = new GenomeMapper(genome, GenomeMapper.createMap(mapping));
+
+  let title = [];
+  for (let i = 0, max = mapper.lookup('n'); i < max; i++) {
+    const c = consonants[Math.floor(mapper.lookup('c' + i) * consonants.length)];
+    const v = vowels[Math.floor(mapper.lookup('v' + i) * vowels.length)];
+    title.push(c);
+    title.push(v);
+  }
+  let str = title[0].toUpperCase() + title.slice(1).join('');
+  return str;
 }
