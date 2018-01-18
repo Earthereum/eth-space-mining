@@ -48,9 +48,9 @@
 </template>
 
 <script>
-  import AuctionButton from '@/components/AuctionButton';
+  import AuctionButton from '@/components/planet/AuctionButton';
   import {Planet} from 'earthereum-renderer';
-  import {processGenome} from '../util.js';
+  import {processGenome} from '@/util.js';
   export default {
     props: ['id'],
     data: () => {

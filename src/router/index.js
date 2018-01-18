@@ -5,7 +5,7 @@ import Market from '@/components/Market'
 import MyPlanets from '@/components/MyPlanets'
 import Admin from '@/components/Admin'
 import DirectLink from '@/components/DirectLink'
-import Planet from '@/components/Planet'
+import Planet from '@/components/planet/Planet'
 import About from '@/components/About'
 
 Vue.use(Router);
