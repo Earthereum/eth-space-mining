@@ -6,7 +6,7 @@
     </v-btn>
     <v-card>
       <v-card-title>
-        <span class="headline">Create Auction for {{ planet.name }}</span>
+        <span class="headline">Create Auction for {{ planet.title }}</span>
       </v-card-title>
       <v-card-text>
         <v-container grid-list-md>
@@ -72,7 +72,6 @@
         // TODO: update
         await core.createSaleAuction(
           this.planet.id,
-          this.sellPrice,
           this.sellPrice,
           this.sellDuration,
           {from: currentUser}
