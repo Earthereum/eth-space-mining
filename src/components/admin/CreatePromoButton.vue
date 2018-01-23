@@ -43,6 +43,7 @@
 </template>
 
 <script>
+  import BigNumber from 'bignumber.js';
   export default {
     data: () => {
       return {
@@ -65,7 +66,8 @@
         if (this.randomize) {
           promoResult = await coreInstance.createRandomPromoPlanet(1, {from: window.web3.eth.accounts[0]});
         } else {
-          promoResult = await coreInstance.createPromoPlanet(this.promoGenome, {from: window.web3.eth.accounts[0]});
+          let genome = new BigNumber(this.promoGenome);
+          promoResult = await coreInstance.createPromoPlanet(genome, {from: window.web3.eth.accounts[0]});
         }
         console.log(promoResult.logs);
 

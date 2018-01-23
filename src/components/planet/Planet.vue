@@ -37,7 +37,7 @@
                             Owner: 0x{{ owner.toString(16) }}
                           </p>
                           <p>
-                            Description: I'm a planet! Globular, floating in space, spherical on average.
+                            Description: Hiya There! I'm {{ planet.title }}!
                           </p>
                         </v-flex>
                       </v-container>
