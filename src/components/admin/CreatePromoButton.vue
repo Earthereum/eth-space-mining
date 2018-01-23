@@ -63,9 +63,9 @@
         // create a new promo planet
         let promoResult;
         if (this.randomize) {
-          promoResult = await coreInstance.createPromoPlanet(1, {from: window.web3.eth.accounts[0]});
+          promoResult = await coreInstance.createRandomPromoPlanet(1, {from: window.web3.eth.accounts[0]});
         } else {
-          throw new Error('Specify genome not yet implemented.');
+          promoResult = await coreInstance.createPromoPlanet(this.promoGenome, {from: window.web3.eth.accounts[0]});
         }
         console.log(promoResult.logs);
 

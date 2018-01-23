@@ -7,8 +7,13 @@ import "./SpaceAuction.sol";
 
 contract SpaceCreation is SpaceAuction{
 	
-	function createPromoPlanet(uint256 seed) public returns(uint256) {
+	function createRandomPromoPlanet(uint256 seed) public returns(uint256) {
 		uint256 genome = uint256(keccak256(block.blockhash(block.number-1), seed));
+		uint256 planet = _createPlanet(0, genome, msg.sender);
+		return planet;
+	}
+
+	function createPromoPlanet(uint genome) public returns(uint256) {
 		uint256 planet = _createPlanet(0, genome, msg.sender);
 		return planet;
 	}
